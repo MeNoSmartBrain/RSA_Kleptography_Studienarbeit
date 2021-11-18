@@ -1,0 +1,42 @@
+\chapter{Grundlagen}
+
+In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie und der IT-Sicherheit erläutert. Aus diesen sollen die grundlegenden Funktionen eines kleptographischen Angriffes und dessen Folgen abgeleitet werden.
+
+\section{Kryptologie}
+    Die Kryptologie ist die wissenschaftliche Disziplin für den Schutz von Daten. Unter ihr stehen die zwei Felder der Kryptographie und der Kryptoanalyse.
+
+    \subsection{Kryptographie}
+        Die Kryptologie befasst sich mit der Entwicklung von Verfahren und Techniken für den sicheren Austausch von Daten. Dabei stehen zwei Eigenschaften \cite{BSW.2015} im Fokus:
+
+        \subsubsection{Eigenschaften}
+            \paragraph{Geheimhaltung}
+                Durch Geheimhaltung (Datenintegrität) sollen, bei der Übertragung von Daten zwischen Teilnehmern, Unbeteiligte keine Erkenntnisse über den Inhalt erlangen. Dies kann durch physikalische oder organisatorische Maßnahmen erreicht werden, wobei Unbeteiligten der Zugang zu den übertragenen Daten verwehrt wird. Diese Maßnahmen sind sinnvoll bei der Übergabe der Daten in einer nicht digitalen Welt. Bei der Kommunikation in digitalen Netzen, wie u.a. dem Internet, sind diese Maßnahmen nur schwer zu implementieren. Dies gilt nicht für kryptographische Maßnahmen. Dabei ist es nicht mehr das Ziel, Unbeteiligten den Zugang zu den übertragenen Daten zu erschweren, sondern den Inhalt der Daten während der Übertragung zu verschlüsseln. Dadurch soll es Unbeteiligten nahezu unmöglich sein, aus den mitgehörten oder abgefangenen Daten, Rückschlüsse auf deren Inhalt zu erlangen.
+                
+            \paragraph{Authentifikation}
+                Durch Authentifikation soll es den Teilnehmern einer Kommunikation möglich sein, die anderen Teilnehmer und empfangene Nachrichten zweifelsfrei identifizieren und zuweisen zu können. Hierbei spielen Signaturverfahren eine wichtige Rolle, da kein Geheimnis benötigt wird um einen Teilnehmer zu authentifizieren. Dabei können sich Teilnehmer durch das Wissen oder den Besitz eines Geheimnisses (Passwort, Zertifikat, Schlüssel) authentifizieren. \cite{BSW.2015}
+
+        Nur wenn beide Eigenschaften gegeben sind ist eine Übertragung von Daten als sicher anzusehen. Falls die Geheimhaltung fehlt, kann der Inhalt durch Sniffing mitgelesen werden. Falls die Authentifikation der Teilnehmer fehlt, können sich Unbeteiligte als "echte" Teilnehmer ausgeben und somit die Daten an ihrem Endpunkt entschlüsseln.
+
+        \subsubsection{Verschlüsselungsverfahren}
+            \paragraph{Asymmetrische Verschlüsselung}
+            % Hier angesprochene Verfahren, unterschiede, Definition / Abgrenzung zu symmetrischen Verfahren
+
+            \paragraph{Hybride Verfahren}
+                % Meiste Verfahren heute hybride Verfahren. Asymmetrisch zum Schlüsselaustausch. Symmetrisch zum Verschlüsseln. Laufzeit von Asymmetrischen Verfahren. Wenn Schlüsselaustausch sicher Geheimhaltung verletzt.
+
+        \subsubsection{Angriffe}
+            % Bedeutung von Brute-Force bei modernen kryptographischen Verfahren
+
+            % Ziel der Angriffe / Bedeutung von Schlüsseln
+            
+            \paragraph{Known Cipher Attack}
+
+            \paragraph{Known Plaintext Attack}
+
+            \paragraph{Chosen Plaintext Attack}
+
+            \paragraph{Chosen Cipher Attack}
+
+
+
+
