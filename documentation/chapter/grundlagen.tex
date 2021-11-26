@@ -1,6 +1,6 @@
 \chapter{Grundlagen}
 
-In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie und der IT-Sicherheit erläutert. Aus diesen sollen die grundlegenden Funktionen eines kleptographischen Angriffes und dessen Folgen abgeleitet werden.
+In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathematik, Zahlentheorie und der IT-Sicherheit erläutert, die in dieser Arbeit eine Rolle spielen. Aus diesen sollen die grundlegenden Funktionen eines kleptographischen Angriffes und dessen Folgen abgeleitet werden.
 
 \section{Kryptologie}
     Die Kryptologie ist die wissenschaftliche Disziplin für den Schutz von Daten. Unter ihr stehen die zwei Felder der Kryptographie und der Kryptoanalyse.
@@ -18,6 +18,7 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie und der IT
         Nur wenn beide Eigenschaften gegeben sind ist eine Übertragung von Daten als sicher anzusehen. Falls die Geheimhaltung fehlt, kann der Inhalt durch Sniffing mitgelesen werden. Falls die Authentifikation der Teilnehmer fehlt, können sich Unbeteiligte als "echte" Teilnehmer ausgeben und somit die Daten an ihrem Endpunkt entschlüsseln.
 
         \subsubsection{Verschlüsselungsverfahren}
+        % Was sind Verschlüsselungsverfahren, Ziel, Historie, momentaner Stand, State of the Art (AES, RSA )
             \paragraph{Asymmetrische Verschlüsselung}
             % Hier angesprochene Verfahren, unterschiede, Definition / Abgrenzung zu symmetrischen Verfahren
 
@@ -36,6 +37,107 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie und der IT
             \paragraph{Chosen Plaintext Attack}
 
             \paragraph{Chosen Cipher Attack}
+
+
+\section{Mathematik}
+    Mathematische Probleme stellen die Grundlage für moderne Kryptographie. 
+
+    \subsection{Diskreter Logarithmus}
+        Bei der Bestimmung des Logarithmus wird der Exponent (hier: $x$) gesucht, welcher mit einer bekannten Zahl als Basis $z$, eine weitere bekannte Zahl $y$ ergibt.
+        \begin{equation}
+            z^{x} = y
+            \eqlabel{eq-log}{Normaler Logarithmus}
+        \end{equation}
+
+        Der diskrete Logarithmus bezieht hier auf die Berechnung des Logarithmus in ein Gruppe. Diese Gruppe bildet sich aus der Rechnung mit Restklassen (modulo). Dadurch entsteht folgendes Problem, bei der die Variable $x$ gesucht ist und alle anderen Variablen bekannt sind.
+        \begin{equation}
+            z^{x} \pmod n \equiv y
+            \eqlabel{eq-dis-log}{Diskreter Logarithmus}
+        \end{equation}
+        
+        Hierbei ist in der Notation zu beachten, dass sich durch das Rechnen auf mit einer Gruppe, Äquivalenzklassen ($\equiv$) bilden. Diese entsprechen den Restklassen des Rechnen mit Modulo. $n$ ist die Mächtigkeit der Aquivalenzklassen.
+
+        Die Bestimmung von $x$ in \ref{eq-dis-log} wird als Problem des diskreten Logarithmus bezeichnet. Mit der Komplexität wird sich in den Grundlagen der Komplexitätstheorie beschäftigt.
+
+        Dabei ist die Umkehrfunktion, des diskreten Logarithmus $f(x)$ \ref{eq-dis-log}, mathematisch einfach zu berechnen. Diese Umkehrfunktion entspricht der diskreten Exponentialfunktion:
+        \begin{equation}
+            f^{-1}(x) = z^{x} \pmod n \equiv y
+            \eqlabel{eq-dis-exp}{Diskretere Exponentialfunktion}
+        \end{equation}
+        Hierbei sind $z,x,n$ gegeben und $y$ gesucht.
+
+    \subsection{Faktorisierung}
+
+
+    \subsection{Effiziente Berechnung der diskreten Exponentialfunktion}
+        In der Kryptographie werden große Zahlen genutzt, um die Sicherheit der verwendeten Algorithmen zu gewährleisten. Hierfür wird als Beispiel angenommen, dass als Basis $z$ eine 256-bit Lange Zahl hoch einem 300-bit langem Exponenten $x$ genommen werden soll. Hierbei ist $n$ 1024-bit lang. 
+
+        Wenn mann nun $z$ in Byte berechnet wäre dies eine 32 Byte lange Zahl.
+
+        $x$ entspricht einer ungefähr 90. stelligen Zahl. 
+
+        \begin{equation}
+            z^{10^{90}} \pmod n \equiv y
+            \eqlabel{eq-dis-exp-lN}{Diskretere Exponentialfunktion mit großen Zahlen}
+        \end{equation}
+
+        Eine numerische Berechnung von $ z^{10^{90}} $ ist aufgrund von begrenzten Ressourcen nicht möglich. 
+
+        Jedoch kann man sich die diskrete Eigenschaft dieser Problems sich zu nutzte machen. Hierfür können Verfahren, wie Square-and-Multiply zusammen mit der Restklassenberechnung genutzt werden. Dadurch lassen sich auch großzahlige Exponenten berechnen. Hierfür soll ein einfaches Beispiel gegeben werden:
+        \begin{equation}
+            37^{52} \pmod {128} \equiv y
+            \eqlabel{eq-dis-exp-bspOne}{Diskretere Exponentialfunktion mit großen Zahlen Beispiel-Eins}
+        \end{equation}
+        Bei Betrachtung der Äquivalenzgleichung fällt auf, dass $37^{52}$ eine große Zahl ergibt. Jedoch wird diese Zahl noch $ x \pmod 128$ gerechnet. Dadurch liegt das Ergebnis in einem Zahlenraum von:
+        \begin{equation}
+            y \in \mathbb{N} \mid 0 \le y < 128 
+            \eqlabel{eq-dis-exp-numSpace}{Diskretere Exponentialfunktion in Zahlenraum}
+        \end{equation}
+
+        Auf Grundlage der Potenzgesetze wird $37^{52}$ nun zerlegt. 
+        \begin{equation}
+        \begin{aligned}
+            52 = 32 + 16 + 4 = 2^{5} + 2^{4} + 2^{2} \\
+            37^{52} \pmod {128} \equiv 37^{2^{5}} * 37^{2^{4}} * 37^{2^{2}} \\
+            \equiv 37^{2^{5}} \pmod {128} * 37^{2^{4}} \pmod {128} * 37^{2^{2}} \pmod {128}
+        \end{aligned}
+        \eqlabel{eq-dis-exp-bspTwo}{Diskretere Exponentialfunktion mit großen Zahlen Beispiel-Zwei}
+        \end{equation}
+
+        Die einzelnen Bestandteile werden dann iterativ berechnet und durch Multiplikation zusammengefasst (siehe \ref{eq-dis-exp-bspTwo}). Dies wird als Square-and-Multiply-Verfahren bezeichnet.
+        \begin{equation}
+        \begin{aligned}
+            37^{2^{2}} \pmod {128} \equiv (37^{2^{1}} \pmod {128})^{2} \\
+            37^{2^{3}} \pmod {128} \equiv (37^{2^{2}} \pmod {128})^{2} \\
+            37^{2^{4}} \pmod {128} \equiv (37^{2^{3}} \pmod {128})^{2} \\
+            37^{2^{5}} \pmod {128} \equiv (37^{2^{4}} \pmod {128})^{2}
+        \end{aligned}
+        \eqlabel{eq-dis-exp-bspThree}{Diskretere Exponentialfunktion mit großen Zahlen Beispiel-Drei}
+        \end{equation}
+        
+        \subsubsection{Allgemein}
+        Gegeben mit gesucht $y$:
+        \begin{equation}
+            z^{x} \pmod n \equiv y
+        \end{equation}
+
+        Zerlegung von $x$ eine Summe von Zweierpotenzen:
+        \begin{equation}
+            x = 2^{0} + 2^{1} + 2^{2} + ...
+        \end{equation}
+
+        Dabei bilden die binären Logarithmen der einzelnen Zweierpotenzen die Menge $\mathbb{K}$.
+
+        Berechnung der einzelnen Faktoren durch iteratives Square-and-Multiply-Verfahren. Dies wird bis $f(max(\mathbb{K}))$ berechnet. $max(\mathbb{K})$ steht hier für das Element von $\mathbb{K}$, mit dem größten Wert.
+        \begin{equation}
+            f(i+1) = f(i)^{2} \pmod n \mid f(1) = z^{1} \pmod n 
+        \end{equation}
+
+        Zuletzt wird das Produkt, aller Ergebnisse von $f(x)$ für die Elemente der Menge $\mathbb{K}$, gebildet. Dabei gilt:
+
+        \begin{equation}
+            \prod_{k \in \mathbb{K}} f(k) \equiv z^{x} \pmod n \equiv y
+        \end{equation}
 
 
 
