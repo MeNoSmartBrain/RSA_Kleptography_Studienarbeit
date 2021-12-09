@@ -1,29 +1,52 @@
 \chapter{Grundlagen}
 
-In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathematik, Zahlentheorie und der IT-Sicherheit erläutert, die in dieser Arbeit eine Rolle spielen. Aus diesen sollen die grundlegenden Funktionen eines kleptographischen Angriffes und dessen Folgen abgeleitet werden.
+In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathematik, Komplexitätstheorie und der IT-Sicherheit erläutert, die in dieser Arbeit eine Rolle spielen. Aus diesen sollen die grundlegenden Funktionen eines kleptographischen Angriffes und dessen Folgen abgeleitet werden.
 
 \section{Kryptologie}
     Die Kryptologie ist die wissenschaftliche Disziplin für den Schutz von Daten. Unter ihr stehen die zwei Felder der Kryptographie und der Kryptoanalyse.
 
     \subsection{Kryptographie}
-        Die Kryptologie befasst sich mit der Entwicklung von Verfahren und Techniken für den sicheren Austausch von Daten. Dabei stehen zwei Eigenschaften \cite{BSW.2015} im Fokus:
+        Die Kryptologie befasst sich mit der Entwicklung von Verfahren und Techniken für den sicheren Austausch von Daten. Dabei stehen zwei Eigenschaften im Fokus:
 
         \subsubsection{Eigenschaften}
             \paragraph{Geheimhaltung}
-                Durch Geheimhaltung sollen, bei der Übertragung von Daten zwischen Teilnehmern, Unbeteiligte keine Erkenntnisse über den Inhalt erlangen. Dies kann durch physikalische oder organisatorische Maßnahmen erreicht werden, wobei Unbeteiligten der Zugang zu den übertragenen Daten verwehrt wird. Diese Maßnahmen sind sinnvoll bei der Übergabe der Daten in einer nicht digitalen Welt. Bei der Kommunikation in digitalen Netzen, wie u.a. dem Internet, sind diese Maßnahmen nur schwer zu implementieren. Dies gilt nicht für kryptographische Maßnahmen. Dabei ist es nicht mehr das Ziel, Unbeteiligten den Zugang zu den übertragenen Daten zu erschweren, sondern den Inhalt der Daten während der Übertragung zu verschlüsseln. Dadurch soll es Unbeteiligten nahezu unmöglich sein, aus den mitgehörten oder abgefangenen Daten, Rückschlüsse auf deren Inhalt zu erlangen.
+                Durch Geheimhaltung sollen, bei der Übertragung von Daten zwischen Teilnehmern, Unbeteiligte keine Erkenntnisse über den Inhalt erlangen. Dies kann durch physikalische oder organisatorische Maßnahmen erreicht werden, wobei Unbeteiligten der Zugang zu den übertragenen Daten verwehrt wird. Diese Maßnahmen sind sinnvoll bei der Übergabe der Daten in einer nicht digitalen Welt. Bei der Kommunikation in digitalen Netzen, wie u.a. dem Internet, sind diese Maßnahmen nur schwer zu implementieren. Dies gilt nicht für kryptographische Maßnahmen. Dabei ist es nicht mehr das Ziel, Unbeteiligten den Zugang zu den übertragenen Daten zu erschweren, sondern den Inhalt der Daten während der Übertragung zu verschlüsseln. Dadurch soll es Unbeteiligten nahezu unmöglich sein, aus den mitgehörten oder abgefangenen Daten, Rückschlüsse auf deren Inhalt zu erlangen. \footcite[1]{BSW.2015}
                 
             \paragraph{Authentifikation}
-                Durch Authentifikation soll es den Teilnehmern einer Kommunikation möglich sein, die anderen Teilnehmer und empfangene Nachrichten zweifelsfrei identifizieren und zuweisen zu können. Hierbei spielen Signaturverfahren eine wichtige Rolle, da kein Geheimnis benötigt wird um einen Teilnehmer zu authentifizieren. Dabei können sich Teilnehmer durch das Wissen oder den Besitz eines Geheimnisses (Passwort, Zertifikat, Schlüssel) authentifizieren. \cite{BSW.2015}
+                Durch Authentifikation soll es den Teilnehmern einer Kommunikation möglich sein, die anderen Teilnehmer und empfangene Nachrichten zweifelsfrei identifizieren und zuweisen zu können. Hierbei spielen Signaturverfahren eine wichtige Rolle, da kein Geheimnis benötigt wird um einen Teilnehmer zu authentifizieren. Dabei können sich Teilnehmer durch das Wissen oder den Besitz eines Geheimnisses (Passwort, Zertifikat, Schlüssel) authentifizieren. \footcite[2]{BSW.2015}
 
         Nur wenn beide Eigenschaften gegeben sind ist eine Übertragung von Daten als sicher anzusehen. Falls die Geheimhaltung fehlt, kann der Inhalt durch Sniffing mitgelesen werden. Falls die Authentifikation der Teilnehmer fehlt, können sich Unbeteiligte als "echte" Teilnehmer ausgeben und somit die Daten an ihrem Endpunkt entschlüsseln.
 
-        \subsubsection{Verschlüsselungsverfahren}
+        \subsubsection{Zusätzliche Eigenschaften}
+            \paragraph{Perfect Forward Security} Perfect Forward Security
+
+        \subsubsection{Kryptographische Verfahren}
+            Kryptographische Verfahren sind Algorithmen, welche die Genheimhaltung von Daten und die Authentifikation von Teilnehmers und Nachrichten sicherstellt. Dadurch kann man sie in Verschlüsselungsverfahren und Authentifikationsverfahren unterscheiden. Dabei können Verfahren, wie z.B. \ac{RSA} beiden Aufgaben übernehmen.
         % Was sind Verschlüsselungsverfahren, Ziel, Historie, momentaner Stand, State of the Art (AES, RSA )
             \paragraph{Asymmetrische Verschlüsselung}
             % Hier angesprochene Verfahren, unterschiede, Definition / Abgrenzung zu symmetrischen Verfahren
+            \label{Asymmetrische Verschlüsselnung}
+                Bei asymmetrischen Verschlüsselungsverfahren wird statt dem gleichen Schlüssel für das Ver- und Entschlüsseln, zwei verschiedene Schlüssel verwendet. Dabei hat jeder Teilnehmer ein öffentlichen Schlüssel $e$ und einen privaten und geheimen Schlüssel $d$. Hierbei ist es vorgesehen, dass möglichst alle potenziellen Teilnehmer den Schlüssel $e$ kennen. Wenn eine Nachricht mit einem der beiden Schlüssel chiffriert wurde, kann nur mittels dem anderen Schlüssel dechiffriert werden. Somit können Nachrichten an einen Teilnehmer verschlüsselt versandt werden, indem diese mit dem öffentlichen Schlüssel $e$ des Teilnehmers chiffriert wird. Nun kann nur der Teilnehmer mit dem zugehörigen privaten Schlüssel $d$, die Nachricht verschlüsseln. Zusätzlich kann auch die Authentifikation von Teilnehmer und die Authentizität von Nachrichten mit hoher Sicherheit festgestellt werden. Somit kann der Author einer Nachricht, einen Fingerabdruck dieser Nachricht mit seinem privaten Schlüssel $d$ signieren, an die Nachricht anhängen und dann beide Teile verschlüsseln. Diese Signatur kann verifiziert werden, indem der Empfänger die Nachricht entschlüsselt und dann die Signatur verifiziert, indem er den öffentlichen Schlüssel des Authors $e$ auf diesen anwendet. Danach vergleicht er den empfangenen Fingerabdruck mit einem eigens erstellten Fingerabdruck. Somit kann die Geheimhaltung, Authentizität und Integrität der Nachricht bestimmt werden.
+                
+                Die zwei Schlüssel $e$ und $d$ eines Teilnehmers, werden auch als Schlüsselpaar bezeichnet. Ein solches verfahren, wird asymmetrisch genannt, da für das Ent- und Verschlüsseln zwei unterschiedliche Informationen vorliegen müssen. Diese Informationen sind auch nicht auseinander ableitbar, wie es z.B. bei multiplikativen Chiffren der Fall wäre. Die Funktionalität des Verfahrens, beruht auf der Annahme, dass alle Teilnehmer Zugang zu den öffentlichen Schlüssel jedes anderen Teilnehmers haben bzw. haben können. Durch diese Charakteristika werden solche Verfahren auch als Public-Key-Kryptographie bezeichnet.
+
+                Dabei wird stets die Annahme getroffen, dass der private Schlüssel eines Teilnehmers ausschließlich diesem vorliegt. Anderenfalls ist die Geheimhaltung und die Authentifikation beim Informationsaustausch von und mit diesem Teilnehmer nicht mehr gewährleistet. Somit wäre die Sicherheit kompromittiert.
+                
+                Die Schlüssel eines Schlüsselpaar bilden somit Umkehrfunktionen zueinander.
 
             \paragraph{Hybride Verfahren}
+            \label{Hybride Verfahren}
                 % Meiste Verfahren heute hybride Verfahren. Asymmetrisch zum Schlüsselaustausch. Symmetrisch zum Verschlüsseln. Laufzeit von Asymmetrischen Verfahren. Wenn Schlüsselaustausch sicher Geheimhaltung verletzt.
+                Asymmetrische Verschlüsselungsverfahren haben häufig den Nachteil, dass die deutlich rechenaufwändiges sind, wie wir später bei \ac{RSA} sehen werden. Es liegen zwar effiziente Verfahren vor, um z.B. die modularen Potenz aus zwei 300-stelligen Zahlen und einem Modulo zu bilden \ref{sec-Effiziente Berechnung der diskreten Exponentialfunktion}. Dennoch sind diese Verfahren mit mehr Aufwand verbunden, als z.B. symmetrische Blockchiffren wie \ac{AES}.
+                
+                Deshalb werden asymmetrische Verfahren für die Initialisierung der Kommunikation verwendet. In dieser Initialisierungsphase soll der Teilnehmer authentifiziert werden und ein gemeinsamer, geheimer, symmetrischer Schlüssel vereinbart werden. 
+                
+                In der darauffolgenden Kommunikationsphase werden die Nachrichten durch symmetrische Chiffren mittels des vereinbarten Schlüssels, effizient verschlüsselt und auf der Gegenseite entschlüsselt. Asymmetrisch Chiffren werden hier benutzt um Fingerabdrücke von Nachrichten zu signieren und zu verifizieren, wie oben \ref{Asymmetrische Verschlüsselnung} gezeigt. Zusätzlich werden durch asymmetrische Verfahren regelmäßig neue symmetrische Schlüssel vereinbart.
+
+                Solche hybriden Verfahren sind z.B. beim Browsen im Internet zu finden. Hier ein Beispiel: \textbf{$TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256$}
+
+
+                % Rotierende Schlüssel, PERFECT FORWARD SECURITY
 
         \subsubsection{Angriffe}
             % Bedeutung von Brute-Force bei modernen kryptographischen Verfahren
@@ -43,6 +66,7 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
     Mathematische Probleme stellen die Grundlage für moderne Kryptographie. 
 
     \subsection{Diskreter Logarithmus}
+    \label{sec-Diskreter Lograithmus}
         Bei der Bestimmung des Logarithmus wird der Exponent (hier: $x$) gesucht, welcher mit einer bekannten Zahl als Basis $z$, eine weitere bekannte Zahl $y$ ergibt.
         \begin{equation}
             z^{x} = y
@@ -67,9 +91,19 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
         Hierbei sind $z,x,n$ gegeben und $y$ gesucht.
 
     \subsection{Faktorisierung}
+    \label{sec-Faktorisierung}
+        Bei der Faktorisierung wird versucht eine Zahl in Faktoren zu zerlegen. Dabei handelt es sich, im Kontext der Kryptographie, meist um die Faktorisierung des Produkts  zweier großer Primzahlen. Dadurch bildet sich folgende Formel, wobei $p$ und $q$ Primzahlen sind (also Element der Menge der Primzahlen $\mathbb{P}$) und $n$ das resultierende Produkt:
+        \begin{equation}
+            n = p * q \mid p,q \in \mathbb{P}
+            \eqlabel{eq-factor}{Faktorisierung großer Zahlen}
+        \end{equation} 
+        Da $n$ das Produkt zweier Primzahlen ist, sind seine einzigen Teiler: $n$ selbst, 1 und die seine Primfaktoren $p$ und $q$. Deshalb handelt es sich hierbei auch um eine Primfaktorzerlegung von $n$. 
+        
+        Dabei ist die Primfaktorzerlegung von $n$ ein rechenaufwändiges Problem, falls $p$ udn $q$ große Zahlen sind. Im Gegensatz dazu ist die Berechnung von bzw. die Validierung mit $n$ sehr einfach, da hierfür nur die Multiplikation von $p$ und $q$ notwendig ist. Somit liegt die gleiche Situation, wie beim Problem des diskreten Logarithmus \ref{sec-Diskreter Lograithmus} vor: Ein rechenaufwändiges Problem, dessen Umkehrfunktion sehr einfach ist \footcite[179]{BSW.2015}. 
 
 
     \subsection{Effiziente Berechnung der diskreten Exponentialfunktion}
+    \label{sec-Effiziente Berechnung der diskreten Exponentialfunktion}
         In der Kryptographie werden große Zahlen genutzt, um die Sicherheit der verwendeten Algorithmen zu gewährleisten. Hierfür wird als Beispiel angenommen, dass als Basis $z$ eine 256-bit Lange Zahl hoch einem 300-bit langem Exponenten $x$ genommen werden soll. Hierbei ist $n$ 1024-bit lang. 
 
         Wenn mann nun $z$ in Byte berechnet wäre dies eine 32 Byte lange Zahl.
@@ -139,6 +173,21 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
             \prod_{k \in \mathbb{K}} f(k) \equiv z^{x} \pmod n \equiv y
         \end{equation}
 
+\section{Komplexitätstheorie}
+    Die Komplexitätstheorie befasst sich mit der Komplexität von Problemen, welche durch Algorithmen gelöst werden. Dabei wird der Speicherbedarf und der Zeitaufwand eines Algorithmus. Schrankenfunktionen werden gebildet durch die Betrachtung des Speicherbedarf und des Zeitaufwands im Bezug auf die Länge der Eingabeparameter. Da hier eine reine kryptographische Betrachtung der Schrankenfunktionen stattfinden soll, wird hier nur in zwei verallgemeinerte Schrankenfunktionen \footcite[178]{BSW.2015} unterschieden:
+    \begin{itemize}
+        \item Polynomiale Komplexität
+        \item Nichtpolynomiale Komplexität
+    \end{itemize}
+    Polynomiale Komplexität umfasst hier alle Probleme, die algorithmisch mit polynomialem Aufwand (Zeit/Speicher) gelöst werden können. D.h. bei steigender Eingabelänge $n$ steigt der Aufwand im schlimmsten Fall mit $\mathcal{O}(n^{c} \mid \text{c is constant})$.
+    Diese Probleme gehören damit zur Komplexitätsklasse \textbf{P}. Diese umfasst alle Probleme, welche algorithmisch mit maximal polynomialem Aufwand gelöst werden können. Diese Probleme können meistens von modernen Computern gelöst werden.
+
+    Nichtpolynomiale Komplexität hingegen umfasst alle Probleme, die mehr als polynomialen Aufwand im Worst-Case brauchen. Dies können Probleme sein, die algorithmisch nur mit exponentiellen $\mathcal{O}(d^{n} \mid d > 1)$ oder faktoriellen $\mathcal{O}(n!)$ Aufwand \footcite{wiki.komplex} gelöst werden können. 
+    Diese Probleme werden der Komplexitätsklasse \textbf{NP} zugewiesen. Dies sind Probleme können nicht von deterministischen Computern in mit polynomialen Aufwand gelöst werden. 
+    
+    \paragraph{Bezug zur Kryptographie} Dadurch sind sie für die Kryptographie besonders interessant, da man die Sicherheit eines Systems auf ein NP-vollständiges Problem stützen kann. Somit ist die theoretische Sicherheit des Systems nicht brechbar. Jedoch sollte darauf geachtet werden, dass die vorgesehenen Teilnehmer an einem Datenaustausch nicht auch das NP-vollständige problem lösen müssen. Ihr Aufwand soll so gering wie möglich gehalten werden, wobei der Aufwand für einen Angreifer exponentiell oder faktoriell zur Sicherheit der Systems (z.B. die Länge des Schlüssels) ist. 
+
+    Beispiele für solche Probleme sind der diskrete Logarithmus \ref{sec-Diskreter Lograithmus} und die Faktorisierung \ref{sec-Faktorisierung} eines Produkt von Primzahlen\footcite[179]{BSW.2015}. Weitere Beispiele wäre die Berechnung des Isomorphismus zweier Graphen, das Berechnen von Modularen Quadratwurzeln oder die Multiplikation auf elliptischen Kurven.
 
 
 
