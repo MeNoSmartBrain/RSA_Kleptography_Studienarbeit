@@ -46,20 +46,37 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
                 Solche hybriden Verfahren sind z.B. beim Browsen im Internet zu finden. Hier ein Beispiel: \textbf{$TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256$}
 
 
-                % Rotierende Schlüssel, PERFECT FORWARD SECURITY
+    \subsection{Kryptoanalyse}
+        Moderne kryptographische Verfahren, werden nach ihrer Sicherheit und ihrer Effizienz beurteilt. Dabei kann die Sicherheit eines Verfahrens auf mathematische Probleme gestützt werden, welche aktuell und in der nahen Zukunft nicht trivial lösbar sind. 
 
-        \subsubsection{Angriffe}
-            % Bedeutung von Brute-Force bei modernen kryptographischen Verfahren
+        Alle Angriffe auf kryptographische Verfahren, gelten dem Erlangen des Geheimtextes einer chiffrierten Nachricht oder dem Berechnen, des verwendeten Geheimnisses.
 
-            % Ziel der Angriffe / Bedeutung von Schlüsseln
+        Bei Angriffen auf das Geheimnis werden hier lediglich computergestützte Angriffe betrachtet, also nur Angriffe, die durch den Einsatz von Rechnerressourcen und Algorithmen versuchen, den geheimen Schlüssel zu bestimmen. Es wird im Allgemeinen davon ausgegangen, das Nutzergeheimnisse, wie Passwörter, Zertifikate und private Schlüssel nicht öffentlich zugänglich sind.
+        Brute-Force Angriffe sind beispielhaft für die Angriffe. Hierbei wird systematisch der Zahlenraum (bzw. Zeichenraum) aller möglicher Schlüsselkombinationen durchprobiert. Weiterentwicklungen dieses Angriffs versuchen auf Grundlage von statistischen Erkenntnissen den Zahlenraum des Geheimnisses einzugrenzen, wie z.B. Wörterbuchangriffe. Hierbei ist die Länge und die Zufälligkeit des Geheimnisses der entscheidende Faktor für einen effektiven Schutz vor Angriffen.
+        
+        Um die Sicherheit von kryptographischen Verfahren beurteilen zu können, werden Angriffe auf diese Verfahren, nach den hierfür notwendigen Voraussetzungen, unterteil. \footcite[20]{Beutelspacher.2015}
+        \paragraph{Known Cipher Attack}
+            Hierbei benötigt der Angreifer beliebige Menge an verschlüsselten Text, um aus diesem den Schlüssel und somit den Geheimtext ableiten zu können.
+        \paragraph{Known Plaintext Attack}
+            Bei diesen Angriffen, kennt der Angreifer eine echte Teilmenge der verschlüsselten Textes und den dazugehörigen Geheimtext. Diese Angriffe sind erfolgreich, wenn sich aus einer echten Teilmenge des Klartextes und dem dazugehörigen Geheimtext, der verwendete Schlüssel berechnen lässt.  
+        \paragraph{Chosen Plaintext Attack}
+            Bei Chosen Plaintext Attack kann der Angreifer die Chiffre zu einem von ihm gewählten Klartext berechnen. Dies ist ein klassischer Fall bei Public-Key-Kryptographie \ref{Asymmetrische Verschlüsselnung}, da hier der Algorithmus (Prinzip von Kerckhoff) und die Schlüssel öffentlich sind. Somit kann sich eine Angreifer zu jedem beliebigen Klartext die entsprechende Chiffre berechnen. Angriffe haben diese Eigenschaft, wenn sich dadurch das Geheimnis (bei Public-Key-Kryptographie der private Schlüssel) berechnen lässt.
+        
+        Zusätzlich ist noch eine weitere Kategorie verwendbar:
+        \paragraph{Chosen Chipher Attack}
+            Hierbei kann der Angreifer jeglichen Geheimtext entschlüsseln. Zusätzlich liegen ihm eine beliebige Menge an abgefangenen Geheimtexten zur Verfügung. Dabei ist die natürlich die Vertraulichkeit bereits versandter Nachrichten kompromittiert. Jedoch ist hierbei das Ziel des Angriffs, das verwendete Geheimnis zu berechnen.
             
-            \paragraph{Known Cipher Attack}
+        Nur wenn für kryptographische Verfahren keiner der aufgeführten Stufen an Voraussetzungen ausreicht, um das verwendete Geheimnis zu berechnen sind diese als sicher zu betrachten. In dieser Arbeit wird mit kryptographischen Verfahren gearbeitet, die als sicher betrachtet werden können.
 
-            \paragraph{Known Plaintext Attack}
+    \subsection{Prinzipien}
+        In der Kryptologie gelten verschiedene Prinzipien. Diese sind zwar in der theoretischen Betrachtung nicht notwendig, haben aber in der realen Welt eine große Bedeutung.
 
-            \paragraph{Chosen Plaintext Attack}
+            % Rotierende Schlüssel, PERFECT FORWARD SECURITY
+        \subsubsection{Prefect Forward Security}
+            \ac{PFS} ist ein Prinzip für kryptographische Verfahren, dass durch zukünftige Veröffentlichung des Geheimnisses, die Vertraulichkeit von in der Vergangenheit versandten Nachrichten nicht gefährdet ist. Dies wird garantiert dadurch, dass langlebige Geheimnisse (bzgl. der Speicherung und Nutzung) zusammen mit temporären Geheimnissen zur Verschlüsselung genutzt werden. Somit kann ein Angreifer, der alte Geheimtexte gesammelt hat und im Besitz des langlebigen Geheimnisses ist, die gespeicherten Geheimtexte nicht entschlüssel. Dies kann auch z.B. durch rotierende Geheimnisse, wie Sitzungsschlüssel erreicht werden.  
 
-            \paragraph{Chosen Cipher Attack}
+        \subsubsection{Prinzip von Kerckhoff}
+            Das Prinzip von Kerckhoff besagt, dass die Sicherheit eines kryptographischen Verfahrens nicht auf der Geheimhaltung des Algorithmus beruhen darf. Dabei soll die Sicherheit alleinig auf dem verwendeten Geheimnisses und seiner Geheimhaltung beruhen. Natürlich sind Verfahren denkbar, die gegen Kerckhoff's Prinzip verstoßen denkbar, aber auf Grundlage der geschichtlicher Erkenntnisse zu vermeiden. \footcite[19]{Beutelspacher.2015}
 
 
 \section{Mathematik}
