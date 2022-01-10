@@ -1,11 +1,11 @@
 \chapter{RSA}
-\ac{RSA} ist ein Algorithmus, welcher zur Klasse der Public-Key-Algorithmen gehört. Der Algorithmus wurde von R. Rivest, A. Shamir und L. Adleman erfunde und trägt deshalb ein Anagram Ihrer Namen.
+\ac{RSA} ist ein kryptographisches Verfahren, welches zu den Public-Key-Verfahren gehört. Der Verfahren wurde von R. Rivest, A. Shamir und L. Adleman erfunde und trägt deshalb ein Anagram Ihrer Namen.
 
 \section{Sicherheit von RSA}
-Die Sicherheit des RSA-Algorithmus basiert auf zwei mathematischen Problemen, welche unter Aufwand endlicher Ressourcen, nicht gelöst werden können. Hierbei wird sich sowohl auf RSA-gestützte Verschlüsselungs- und Signaturverfahren bezogen.
+Die Sicherheit des RSA-Verfahrens basiert auf zwei mathematischen Problemen, welche unter Aufwand endlicher Ressourcen, nicht gelöst werden können. Hierbei wird sich sowohl auf RSA-gestützte Verschlüsselungs- und Signaturverfahren bezogen.
 Diese zwei Probleme sind:
 \begin{itemize}
-    \item Faktorisierung einer bekannten Zahl, welche das Produkt zweier großer Primzahlen ist. Im Kontext von RSA ist diese Zahl $n$.
+    \item Faktorisierung einer bekannten Zahl, welche das Produkt zweier großer Primzahlen ist. Im Kontext von RSA ist diese Zahl mit $n$ repraesentiert.
     \item Bestimmung des diskreten Logarithmus. Bei RSA wäre dies die Bestimmung von 
     \begin{equation}
         d \mid m^{d} \equiv c \pmod n .

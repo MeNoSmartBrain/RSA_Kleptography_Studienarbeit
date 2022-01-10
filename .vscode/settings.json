@@ -1,3 +1,15 @@
 {
-    "cSpell.language": "en,de-DE"
+    // "latex-workshop.latex.outDir": "%DIR%/aux",
+    "cSpell.language": "en,de-DE",
+    "files.exclude": {
+        "**/*.aux": true,
+        "**/*.for": true,
+        "**/*blx.bib": true,
+        "**/*.lol": true,
+        "**/*.run.xml": true,
+        "**/*.bbl": true,
+        "**/*.gz": true
+
+    }
+
 }
