@@ -26,7 +26,7 @@
     
     Der größte gemeinsame Teiler von $e$ und $\phi(n)$ bildet $d$, den privaten Schlüssel. Dabei gilt:
         \begin{equation}
-            c * \phi(n) + e * d = 1
+            c * \phi(n) + e * d \equiv 1
             \eqlabel{eq-rsa-calc_d}{RSA - Berechnung des privaten Schlüssels}
         \end{equation}
     
@@ -72,7 +72,7 @@
     Die Sicherheit des RSA-Verfahrens basiert auf zwei mathematischen Problemen, welche unter Aufwand endlicher Ressourcen, nicht gelöst werden können. Hierbei wird sich sowohl auf RSA-gestützte Verschlüsselungs- und Signaturverfahren bezogen.
     Diese zwei Probleme sind:
     \begin{itemize}
-        \item Faktorisierung einer bekannten Zahl, welche das Produkt zweier großer Primzahlen ist. Im Kontext von RSA ist diese Zahl mit $n$ repraesentiert.
+        \item Faktorisierung einer bekannten Zahl, welche das Produkt zweier großer Primzahlen ist. Im Kontext von RSA ist diese Zahl mit $n$ repräsentiert.
         \item Bestimmung des diskreten Logarithmus. Bei RSA wäre dies die Bestimmung von 
         \begin{equation}
             d \mid m^{d} \equiv c \pmod n .
