@@ -8,6 +8,7 @@
         "**/*.lol": true,
         "**/*.run.xml": true,
         "**/*.bbl": true,
+        "**/*.fls": true,
         "**/*.gz": true
 
     }
