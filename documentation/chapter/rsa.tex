@@ -1,7 +1,27 @@
 \chapter{RSA}
-\ac{RSA} ist ein kryptographisches Verfahren, welches zu den Public-Key-Verfahren gehört. Der Verfahren wurde von R. Rivest, A. Shamir und L. Adleman erfunde und trägt deshalb ein Anagram Ihrer Namen.
+\ac{RSA} ist ein kryptographisches Verfahren, welches zu den Public-Key-Verfahren gehört. Der Verfahren wurde von R. Rivest, A. Shamir und L. Adleman entwickelt und trägt deshalb ein Anagram der Erfinder als Namen.
 
-\section{Sicherheit von RSA}
+\section{Auflauf}
+    \paragraph{Ausgangszenario} Teilnehmer A will über ein öffentliches Netz sicher mit anderen Teilnehmer kommunizieren. 
+
+    \paragraph{Schlüsselgeneration} Damit andere Teilnehmer geheime Nachrichten schicken können muss A sich ein Schlüsselpaar generieren. Dafür wählt er zwei zufällige und große Primzahlen: $p$ und $q$. 
+
+    Das Produkt von $p$ und $q$ bildet $n$, welche den Modulo / den Zahlenraum für weitere mathematische Operationen festlegt: 
+        \begin{equation}
+            n = p * q
+        \end{equation}
+
+    Daraufhin berechnet der Teilnehmer die Eulersche $\phi$-Funktion von $p$ und $q$:
+        \begin{equation}
+            \phi(n) = (p-1) * (q-1)
+        \end{equation})
+    
+    Der öffentliche Schlüssel $e$ ist dann eine zu $\phi(n)$ teilerfremde Zahl. Man kann dies auch vereinfachen und eine Fermat’sche Primzahl für $e$ verwenden:
+        \begin{equation}
+            2^{2^{n}}+1 \mid n=0,1,2,3,4
+        \end{equation}
+
+\section{Sicherheit}
 Die Sicherheit des RSA-Verfahrens basiert auf zwei mathematischen Problemen, welche unter Aufwand endlicher Ressourcen, nicht gelöst werden können. Hierbei wird sich sowohl auf RSA-gestützte Verschlüsselungs- und Signaturverfahren bezogen.
 Diese zwei Probleme sind:
 \begin{itemize}
