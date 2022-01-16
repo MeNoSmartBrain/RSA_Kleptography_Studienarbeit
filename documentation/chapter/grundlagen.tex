@@ -47,6 +47,7 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
 
 
     \subsection{Kryptoanalyse}
+        \label{sec-Kryptoanalyse}
         Moderne kryptographische Verfahren, werden nach ihrer Sicherheit und ihrer Effizienz beurteilt. Dabei kann die Sicherheit eines Verfahrens auf mathematische Probleme gestützt werden, welche aktuell und in der nahen Zukunft nicht trivial lösbar sind. 
 
         Alle Angriffe auf kryptographische Verfahren, gelten dem Erlangen des Geheimtextes einer chiffrierten Nachricht oder dem Berechnen, des verwendeten Geheimnisses.
@@ -54,7 +55,7 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
         Bei Angriffen auf das Geheimnis werden hier lediglich computergestützte Angriffe betrachtet, also nur Angriffe, die durch den Einsatz von Rechnerressourcen und Algorithmen versuchen, den geheimen Schlüssel zu bestimmen. Es wird im Allgemeinen davon ausgegangen, das Nutzergeheimnisse, wie Passwörter, Zertifikate und private Schlüssel nicht öffentlich zugänglich sind.
         Brute-Force Angriffe sind beispielhaft für die Angriffe. Hierbei wird systematisch der Zahlenraum (bzw. Zeichenraum) aller möglicher Schlüsselkombinationen durchprobiert. Weiterentwicklungen dieses Angriffs versuchen auf Grundlage von statistischen Erkenntnissen den Zahlenraum des Geheimnisses einzugrenzen, wie z.B. Wörterbuchangriffe. Hierbei ist die Länge und die Zufälligkeit des Geheimnisses der entscheidende Faktor für einen effektiven Schutz vor Angriffen.
         
-        Um die Sicherheit von kryptographischen Verfahren beurteilen zu können, werden Angriffe auf diese Verfahren, nach den hierfür notwendigen Voraussetzungen, unterteil. \footcite[20]{Beutelspacher.2015}
+        Um die Sicherheit von kryptographischen Verfahren beurteilen zu können, werden erfolgreiche Angriffe auf diese Verfahren, nach den hierfür notwendigen Voraussetzungen, unterteilt. \footcite[20]{Beutelspacher.2015}
         \paragraph{Known Cipher Attack}
             Hierbei benötigt der Angreifer beliebige Menge an verschlüsselten Text, um aus diesem den Schlüssel und somit den Geheimtext ableiten zu können.
         \paragraph{Known Plaintext Attack}
