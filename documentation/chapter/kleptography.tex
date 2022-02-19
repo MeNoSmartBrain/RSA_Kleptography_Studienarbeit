@@ -12,7 +12,7 @@
         % Angriff auf die Implementation
 
     \section{Aufbau kleptographischer Angriffe}
-
+    
 
         \subsection{Vorrausetzungen}
 
@@ -20,5 +20,107 @@
         \subsection{SETUP}
         % Beschreibung des SETUPS
 
-    \section{Kleptographische Angriffe auf RSA}
+    \section{SETUP für RSA}
+        \subsection{Voraussetzungen}
+            Für ein \ac{SETUP}-Angriff auf eine Implementation von \ac{RSA} hat der Angreifer ein eigenes Schlüsselpaar: $N_{A}$ Modulus des Angreifers, $E_{A}$ Öffentlicher Schlüssel des Angreifers, $D_{A}$ Privater Schlüssel des Angreifers. Das Schlüsselpaar wird wie für \ac{RSA} üblich generiert.
+        
+        \subsection{Generierung und Verschlüsselung}
+            \paragraph{Schritt 1} \label{sec-Schritt-Gen 1} Es wird eine zufällige Primzahl $P$ generiert. $P$ wird dann mit dem öffentlichen Schlüssel des Angreifers verschlüsselt:
+            \begin{equation}
+                vP = E_{A}(P) \pmod N_{A}
+                \eqlabel{eq-SETUP-vP}{Verschlüsselung von P mit dem öffentlichen Schlüssel des Angreifers}
+            \end{equation}
+
+            \paragraph{Schritt 2} \label{sec-Schritt-Gen 2} $N'$ wird gebildet indem $vP$ und eine weiter zufällige Primzahl $t$ in binärer Form konkateniert werden:
+            \begin{equation}
+                N' = vP || t
+                \eqlabel{eq-SETUP-N'}{Berechnung des temporären Modulus}
+            \end{equation}
+            $N'$ ist dabei nicht der Modulus des generierten \ac{RSA}-Schlüsselpaars sondern nur eine temporäre Form.
+
+            \paragraph{Schritt 3} \label{sec-Schritt-Gen 3} Berechnung der zweiten Primzahl $Q$: 
+            \begin{equation}
+                P * Q + R = N'
+                \eqlabel{eq-SETUP-Q}{Berechnung der zweiten Primzahl P}
+            \end{equation}
+            Dabei ist $R$ der ungenutzte Rest und es gilt:
+            \begin{equation}
+                R = N' \pmod P
+                \eqlabel{eq-SETUP-QR}{Berechnung von R}
+            \end{equation}
+            \begin{equation}
+                Q = \frac{N'-R}{P}
+                \eqlabel{eq-SETUP-QQ}{Berechnung von Q}
+            \end{equation}
+
+            \paragraph{Schritt 4} \label{sec-Schritt-Gen 4} Bestimmung des Modulus $N$, wie für \ac{RSA} üblich durch:
+            \begin{equation}
+                N = P * Q
+                \eqlabel{eq-SETUP-N}{Berechnung von N}
+            \end{equation}
+
+            \paragraph{Schritt 5} \label{sec-Schritt-Gen 5} Wählen des öffentlichen Schlüssels $E$ und Berechnen des privaten Schlüssels $D$ mittels der modularen multiplikativen Inversen bzgl. $\phi(N)$:
+            \begin{equation}
+                D = mmi(E, \phi(N))
+                \eqlabel{eq-SETUP-D}{Berechnung von D}
+            \end{equation}
+
+            \paragraph{Schritt 6} \label{sec-Schritt-Gen 6} Mit Schritt 5 wurde ein vollkommen funktionales \ac{RSA}-Schlüsselpaar erstellt. Mittels diesem können nun Informationen verschlüsselt/signiert, Chiffren entschlüsselt und Signaturen verifiziert werden, wie in \ref{sec-RSA-crypt} und \ref{sec-RSA-sign} gezeigt wurde.
+        
+        \subsection{Angriff}
+            \paragraph{Schritt 1} \label{sec-Schritt-Ang 1} Der Angreifer erlangt den öffentlichen Schlüssel des Ziels und besitzt somit $N$ und $E$. Dies ist möglich, da diese Informationen öffentlich sind.
+
+            \paragraph{Schritt 2} \label{sec-Schritt-Ang 2} Der Angreifer teilt $N$ in binärer Form in der Hälfte womit er $vP$ erhält. Die mathematische Begründung, wieso dies möglich ist folgt später. 
+            % sdlkawkldiosdipwahip
+            % Ref above
+
+            \paragraph{Schritt 3} \label{sec-Schritt-Ang 3} $P$ wird durch die Entschlüsslung von $vP$ mittels des privaten Schlüssels des Angreifers berechnet: 
+            \begin{equation}
+                P = D_{A}(vP) \pmod N_{A}
+                \eqlabel{eq-SETUP-P}{Berechnung des ersten Primfaktors bei kleinem R}
+            \end{equation}
+            Damit ist dieser Schritt die inverse Operation zu \ref{sec-Schritt-Gen 1}.
+            Zusätzlich muss auch $vP + 1$ entschlüsselt werden.
+            Die mathematische Begründung, wieso dies möglich ist folgt später. 
+            % sdlkawkldiosdipwahip
+            % Ref above
+            % Bei der Überprüfung, Prüfen ob P und Q prim
+            \begin{equation}
+                P' = D_{A}(vP+1) \pmod N_{A}
+                \eqlabel{eq-SETUP-Palt}{Berechnung des ersten Primfaktors bei großem R}
+            \end{equation}
+            
+            \paragraph{Schritt 4} \label{sec-Schritt-Ang 4} Hiermit ist der Angreifer im Besitz des ersten Primfaktors $P$ oder $P'$. Somit ist die Primfaktorzerlegung von $N$ trivial:
+            \begin{equation}
+                Q = N / P
+                \eqlabel{eq-SETUP-Q}{Primfaktorzerlegung für P}
+            \end{equation}
+            Die Primfaktorzerlegung muss, gleich wie bei \ref{sec-Schritt-Ang 3}, für den alternativen Primfaktor $P'$ berechnet werden:
+            \begin{equation}
+                Q' = N / P
+                \eqlabel{eq-SETUP-Q}{Primfaktorzerlegung für P'}
+            \end{equation}
+
+            \paragraph{Schritt 5} \label{sec-Schritt-Ang 5} Der Angreifer ist hiermit im Besitz der Primfaktoren $P$, $Q$ und kann den privaten Schlüssel $D$ bestimmen \eqref{eq-SETUP-D}. Gleiches muss für die alternativen Primfaktoren berechnet werden.
+
+            \paragraph{Schritt 6} \label{sec-Schritt-Ang 6} Der Angreifer besitzt den privaten und öffentlichen Schlüssel. Somit können Chiffren entschlüsselt und Signaturen gefälscht werden. Dabei muss der Angreifer, wenn noch nicht geschehen, den privaten Schlüssel $D$ und den alternativen privaten Schlüssel $D'$ einmalig testen, um den richtigen zu bestimmen.
+
+        \subsection{Hintergründe zum RSA-SETUP}
+            \subsubsection{Informationsgewinnung von vP aus N}
+
+            \subsubsection{Bedigungen für den alternativen Primfaktor} \label{sec-SETUP-Hin-Prim}
+                
+
+            \subsection{Verfahren zur Bestimmung des korrekten Primfaktors}
+                In Schritt 
+
+
+
+
+        
+
+
+
+      
+
 

@@ -32,7 +32,7 @@
     
     Danach besitzt der Teilnehmer A ein öffentlichen Schlüssel $e$ und einen privaten Schlüssel $d$. Er kann nun den öffentlichen Schlüssel $e$ zusammen mit $n$ veröffentlichen. $e$ zusammen mit $n$ und $d$ sind ein Schlüsselpaar welches in einen öffentlichen Teil und ein privaten Teil geteilt wird. Dabei herrscht eine eindeutige Zuordnung zwischen den Teilen.
     
-    \subsection{Verschlüsselung}
+    \subsection{Verschlüsselung} \label{sec-RSA-crypt}
         Wenn Teilnehmer B eine verschlüsselte Nachricht $m$ an Teilnehmer A senden will, braucht er hierfür den öffentlichen Schlüssel von A. Dabei B  verschlüsselt wie folgt, wobei $c$ der resultierende Geheimtext ist.
 
         \begin{equation}
@@ -49,7 +49,7 @@
 
         Da $d$ privat und eindeutig für den öffentlichen Teil des Schlüsselpaars ist, können nur Teilnehmer, die über $d$ verfügen, Nachrichten entschlüsseln, die mit dem zugehörigen öffentlichen Teil verschlüsselt wurden.
     
-    \subsection{Signatur}
+    \subsection{Signatur} \label{sec-RSA-sign}
         Das RSA-Verfahren ermöglicht auch das Signieren von Nachrichten. Dies wird z.B. im Internet genutzt um Teilnehmer zu authentifizieren und Nachrichtenintegrität zu sichern. RSA wird jedoch meist nur auf kleinere Nachrichten wie Fingerabdrücke angewandt.
 
         Signatur $s$ einer Nachricht $m$ von Teilnehmer A:
