@@ -27,11 +27,11 @@
         \subsection{Generierung und Verschlüsselung}
             \paragraph{Schritt 1} \label{sec-Schritt-Gen 1} Es wird eine zufällige Primzahl $P$ generiert. $P$ wird dann mit dem öffentlichen Schlüssel des Angreifers verschlüsselt:
             \begin{equation}
-                vP = E_{A}(P) \pmod N_{A}
+                vP = P^{E_{A}} \mod N_{A}
                 \eqlabel{eq-SETUP-vP}{Verschlüsselung von P mit dem öffentlichen Schlüssel des Angreifers}
             \end{equation}
 
-            \paragraph{Schritt 2} \label{sec-Schritt-Gen 2} $N'$ wird gebildet indem $vP$ und eine weiter zufällige Primzahl $t$ in binärer Form konkateniert werden:
+            \paragraph{Schritt 2} \label{sec-Schritt-Gen 2} $N'$ wird gebildet indem $vP$ und eine Zufallszahl gleicher Länge $t$ in binärer Form konkateniert werden:
             \begin{equation}
                 N' = vP || t
                 \eqlabel{eq-SETUP-N'}{Berechnung des temporären Modulus}
@@ -43,16 +43,7 @@
                 P \cdot Q + R = N'
                 \eqlabel{eq-SETUP-Q}{Berechnung der zweiten Primzahl P}
             \end{equation}
-            Dabei ist $R$ der ungenutzte Rest und es gilt:
-            \begin{equation}
-                R = N' \pmod P
-                \eqlabel{eq-SETUP-QR}{Berechnung von R}
-            \end{equation}
-            \begin{equation}
-                Q = \frac{N'-R}{P}
-                \eqlabel{eq-SETUP-QQ}{Berechnung von Q}
-            \end{equation}
-
+            
             \paragraph{Schritt 4} \label{sec-Schritt-Gen 4} Bestimmung des Modulus $N$, wie für \ac{RSA} üblich durch:
             \begin{equation}
                 N = P \cdot Q
@@ -61,7 +52,7 @@
 
             \paragraph{Schritt 5} \label{sec-Schritt-Gen 5} Wählen des öffentlichen Schlüssels $E$ und Berechnen des privaten Schlüssels $D$ mittels der modularen multiplikativen Inversen bzgl. $\phi(N)$:
             \begin{equation}
-                D = mmi(E, \phi(N))
+                D = modular\_multiplicative\_inverse(E, \phi(N))
                 \eqlabel{eq-SETUP-D}{Berechnung von D}
             \end{equation}
 
@@ -70,23 +61,19 @@
         \subsection{Angriff}
             \paragraph{Schritt 1} \label{sec-Schritt-Ang 1} Der Angreifer erlangt den öffentlichen Schlüssel des Ziels und besitzt somit $N$ und $E$. Dies ist möglich, da diese Informationen öffentlich sind.
 
-            \paragraph{Schritt 2} \label{sec-Schritt-Ang 2} Der Angreifer teilt $N$ in binärer Form in der Hälfte womit er $vP$ erhält. Die mathematische Begründung, wieso dies möglich ist folgt später. 
-            % sdlkawkldiosdipwahip
-            % Ref above
+            \paragraph{Schritt 2} \label{sec-Schritt-Ang 2} Der Angreifer teilt $N$ in binärer Form in der Hälfte womit er $vP$ erhält. Die mathematische Begründung hierfür in \ref{sec-SETUP-vP_from_N}.
 
             \paragraph{Schritt 3} \label{sec-Schritt-Ang 3} $P$ wird durch die Entschlüsslung von $vP$ mittels des privaten Schlüssels des Angreifers berechnet: 
             \begin{equation}
-                P = D_{A}(vP) \pmod N_{A}
+                P = (vP)^{D_{A}} \mod N_{A}
                 \eqlabel{eq-SETUP-P}{Berechnung des ersten Primfaktors bei kleinem R}
             \end{equation}
             Damit ist dieser Schritt die inverse Operation zu \ref{sec-Schritt-Gen 1}.
             Zusätzlich muss auch $vP + 1$ entschlüsselt werden.
-            Die mathematische Begründung, wieso dies möglich ist folgt später. 
-            % sdlkawkldiosdipwahip
-            % Ref above
+            Die mathematische Begründung hierfür in \ref{sec-SETUP-Hin-Prim}.
             % Bei der Überprüfung, Prüfen ob P und Q prim
             \begin{equation}
-                P' = D_{A}(vP+1) \pmod N_{A}
+                P' = (vP+1)^{D_{A}} \mod N_{A}
                 \eqlabel{eq-SETUP-Palt}{Berechnung des ersten Primfaktors bei großem R}
             \end{equation}
             
@@ -97,7 +84,7 @@
             \end{equation}
             Die Primfaktorzerlegung muss, gleich wie bei \ref{sec-Schritt-Ang 3}, für den alternativen Primfaktor $P'$ berechnet werden:
             \begin{equation}
-                Q' = N / P
+                Q' = N / P'
                 \eqlabel{eq-SETUP-Q}{Primfaktorzerlegung für P'}
             \end{equation}
 
@@ -106,14 +93,41 @@
             \paragraph{Schritt 6} \label{sec-Schritt-Ang 6} Der Angreifer besitzt den privaten und öffentlichen Schlüssel. Somit können Chiffren entschlüsselt und Signaturen gefälscht werden. Dabei muss der Angreifer, wenn noch nicht geschehen, den privaten Schlüssel $D$ und den alternativen privaten Schlüssel $D'$ einmalig testen, um den richtigen zu bestimmen.
 
         \subsection{Hintergründe zum RSA-SETUP}
-            \subsubsection{Informationsgewinnung von vP aus N}
+            \subsubsection{Informationsgewinnung von vP aus N} \label{sec-SETUP-vP_from_N}
                 
 
             \subsubsection{Bedigungen für den alternativen Primfaktor} \label{sec-SETUP-Hin-Prim}
                 
 
             \subsection{Verfahren zur Bestimmung des korrekten Primfaktors}
-                In Schritt 
+                Die Schritte 3 bis 6 des Angriffs befassen sich mit dem Finden des korrekten Primfaktor aus den zwei resultierenden Möglichkeiten von vP $vP$ und $vP+1$. Daraus werden die Werte und ihre Alternativen für $P$, $N$, $Q$ und $D$ berechnet. 
+                Um schlussendlich zu entscheiden, ob die Werte die aus $vP$ oder $vP+1$, kann eine Signatur mit $D$ und $D'$ mit einer Signatur des Angriffsziels verglichen werden. Dadurch kann eine eindeutige Entscheidung getroffen werden. 
+
+                Diese Entscheidung kann jedoch unter Umständen früher berechnet werden. Dieser Fall kann bei folgenden Berechnungsschritten  auftreten:
+
+                
+
+                \subsubsection{Berechnung von P}
+                    $P$ wird berechnet indem $vP$ mittels dem privaten Schlüssel $D_{A}$ des Angreifers entschlüsselt wird. Dabei sollte, wie für eine \ac{RSA}-Ver-/Entschlüsselung üblich, eine vollkommen zufällige Zahl resultieren. Jedoch ist es eine Bedingung, dass $P$ prim ist. 
+                    Die Wahrscheinlichkeit, dass eine Zufallszahl, mit steigender Anzahl an Stellen, prim ist sehr gering. 
+                    Mathematische Erläuterung %ref
+
+                    Falls das entschlüsselte $P$ nicht prim ist, muss es die Alternative $P'$ sein. Gleiches gilt wiederum auch für $P'$.
+
+                \subsubsection{Berechnung von Q} 
+                    Bei der Berechnung von $Q$ gilt die gleiche Eigenschaft, wie bei $P$, dass $Q$ prim seien muss.
+
+                    Jedoch kann unter Umständen schon bei der Berechnung von $Q$, durch die Division mit Dividend $N$ und Divisor $P$, die Entscheidung getroffen werden. Dabei wird geprüft, ob $Q$ ganzzahlig ist. 
+                    Die Wahrscheinlichkeit für diesen Fall wird hier erläutert: %ref.
+                    Die Entscheidung kann hierbei mit einer Laufzeit von $O(1)$ getroffen werden. Dies ist deutlich schneller als die Laufzeit einer Überprüfung auf prim. 
+                    Diese Überprüfung wird hier erläutert %ref.
+
+                \subsubsection{Fehler bei der modularen multiplikativen Inverse}
+                    Bei der Berechnung von $D$ wird die modulare multiplikative Inverse von $E$ und $\phi(N)$ bestimmt. Dabei kann es zu einem Fehler kommen, da für den Tupel von $E$ und $\phi(N)$ möglicherweise keine modulare multiplikative Inverse existiert.
+
+                    % Mathematische Wahrscheinlichkeit
+                
+                
 
 
 
