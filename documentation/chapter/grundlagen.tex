@@ -61,7 +61,7 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
         \paragraph{Known Plaintext Attack}
             Bei diesen Angriffen, kennt der Angreifer eine echte Teilmenge der verschlüsselten Textes und den dazugehörigen Geheimtext. Diese Angriffe sind erfolgreich, wenn sich aus einer echten Teilmenge des Klartextes und dem dazugehörigen Geheimtext, der verwendete Schlüssel berechnen lässt.  
         \paragraph{Chosen Plaintext Attack}
-            Bei Chosen Plaintext Attack kann der Angreifer die Chiffre zu einem von ihm gewählten Klartext berechnen. Dies ist ein klassischer Fall bei Public-Key-Kryptographie \ref{Asymmetrische Verschlüsselnung}, da hier der Algorithmus (Prinzip von Kerckhoff) und die Schlüssel öffentlich sind. Somit kann sich eine Angreifer zu jedem beliebigen Klartext die entsprechende Chiffre berechnen. Angriffe haben diese Eigenschaft, wenn sich dadurch das Geheimnis (bei Public-Key-Kryptographie der private Schlüssel) berechnen lässt.
+            Bei Chosen Plaintext Attack kann der Angreifer das Chiffrat zu einem von ihm gewählten Klartext berechnen. Dies ist ein klassischer Fall bei Public-Key-Kryptographie \ref{Asymmetrische Verschlüsselnung}, da hier der Algorithmus (Prinzip von Kerckhoff) und die Schlüssel öffentlich sind. Somit kann sich eine Angreifer zu jedem beliebigen Klartext das entsprechende Chiffrat berechnen. Angriffe haben diese Eigenschaft, wenn sich dadurch das Geheimnis (bei Public-Key-Kryptographie der private Schlüssel) berechnen lässt.
         
         Zusätzlich ist noch eine weitere Kategorie verwendbar:
         \paragraph{Chosen Chipher Attack}
@@ -81,6 +81,20 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
 
 
 \section{Mathematik}
+    \subsection{Primzahlen}
+    \label{sec-prim}
+        Primzahlen werden in mehreren asymmetrischen Verfahren genutzt. Im Rahen dieser Arbeit wird die Menge aller Primzahlen als $\mathbb{P}$. definiert. Wenn eine Zahl prim ist, ist diese Element von $\mathbb{P}$. 
+
+    % TODO
+    % Chiffre vs Chiffrat
+    
+    % Wahrscheinlichkeit dass Zufallszahl gleich prim
+    % Laufzeit für die Generierung von Primzahlen
+    % Laufzeit für Primzahltest
+    % Definition von prim
+
+    % p für Keine modulare Multiplikative Inverse
+
     Mathematische Probleme stellen die Grundlage für moderne Kryptographie. 
 
     \subsection{Diskreter Logarithmus}
@@ -206,15 +220,4 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
     \paragraph{Bezug zur Kryptographie} Dadurch sind sie für die Kryptographie besonders interessant, da man die Sicherheit eines Systems auf ein NP-vollständiges Problem stützen kann. Somit ist die theoretische Sicherheit des Systems nicht brechbar. Jedoch sollte darauf geachtet werden, dass die vorgesehenen Teilnehmer an einem Datenaustausch nicht auch das NP-vollständige problem lösen müssen. Ihr Aufwand soll so gering wie möglich gehalten werden, wobei der Aufwand für einen Angreifer exponentiell oder faktoriell zur Sicherheit der Systems (z.B. die Länge des Schlüssels) ist. 
 
     Beispiele für solche Probleme sind der diskrete Logarithmus \ref{sec-Diskreter Lograithmus} und die Faktorisierung \ref{sec-Faktorisierung} eines Produkt von Primzahlen\footcite[179]{BSW.2015}. Weitere Beispiele wäre die Berechnung des Isomorphismus zweier Graphen, das Berechnen von Modularen Quadratwurzeln oder die Multiplikation auf elliptischen Kurven.
-
-
-    % Chiffre vs Chiffrat
-    
-    % Wahrscheinlichkeit dass Zufallszahl gleich prim
-    % Wahrscheinlichkeit dass zufällige Primzahl, eine Zahl mit doppelten Stellen ganz teilt.
-    % Generierung von Primzahlen
-    % Laufzeit für Primzahltest
-    % Definition von prim
-
-
 
