@@ -4,78 +4,85 @@
 \section{Ablauf}
     \paragraph{Ausgangszenario} Teilnehmer A will über ein öffentliches Netz sicher mit anderen Teilnehmer kommunizieren. 
 
-    \paragraph{Schlüsselgeneration} Damit andere Teilnehmer geheime Nachrichten schicken können muss A sich ein Schlüsselpaar generieren. Dafür wählt er zwei zufällige und große Primzahlen: $p$ und $q$. 
+    \paragraph{Schlüsselgeneration} Damit andere Teilnehmer geheime Nachrichten schicken können muss A sich ein Schlüsselpaar generieren. Dafür wählt er zwei zufällige und große Primzahlen: $P$ und $Q$. 
 
-    Das Produkt von $p$ und $q$ bildet $n$, welche den Modulo / den Zahlenraum für weitere mathematische Operationen festlegt: 
+    Das Produkt von $P$ und $Q$ bildet $N$, welche den Modulo / den Zahlenraum für weitere mathematische Operationen festlegt: 
         \begin{equation}
-            n = p * q
+            N = P * Q
             \eqlabel{eq-rsa-npq}{RSA - Primfaktoren}
         \end{equation}
 
-    Daraufhin berechnet der Teilnehmer die Eulersche $\phi$-Funktion von $p$ und $q$:
+    Daraufhin berechnet der Teilnehmer die Eulersche $\phi$-Funktion von $P$ und $Q$:
         \begin{equation}
-            \phi(n) = (p-1) * (q-1)
+            \phi(N) = (P-1) * (Q-1)
             \eqlabel{eq-rsa-phi_n}{RSA - Eulersche $\phi$-Funktion}
         \end{equation})
     
-    Der öffentliche Schlüssel $e$ ist dann eine zu $\phi(n)$ teilerfremde Zahl. Man kann dies auch vereinfachen und eine Fermat'sche Primzahl für $e$ verwenden:
+    Der öffentliche Schlüssel $E$ ist dann eine zu $\phi(N)$ teilerfremde Zahl. Man kann dies auch vereinfachen und eine Fermat'sche Primzahl für $E$ verwenden:
         \begin{equation}
-            2^{2^{n}}+1 \mid n \in \{0,1,2,3,4\}
+            2^{2^{N}}+1 \mid N \in \{0,1,2,3,4\}
             \eqlabel{eq-rsa-ferma}{Fermat'sche Primzahl}
         \end{equation}
     
-    Der größte gemeinsame Teiler von $e$ und $\phi(n)$ bildet $d$, den privaten Schlüssel. Dabei gilt:
+    Der größte gemeinsame Teiler von $E$ und $\phi(n)$ bildet $D$, den privaten Schlüssel. Dabei gilt:
         \begin{equation}
-            c * \phi(n) + e * d \equiv 1
+            c * \phi(N) + E * D \equiv 1
             \eqlabel{eq-rsa-calc_d}{RSA - Berechnung des privaten Schlüssels}
         \end{equation}
     
-    Danach besitzt der Teilnehmer A ein öffentlichen Schlüssel $e$ und einen privaten Schlüssel $d$. Er kann nun den öffentlichen Schlüssel $e$ zusammen mit $n$ veröffentlichen. $e$ zusammen mit $n$ und $d$ sind ein Schlüsselpaar welches in einen öffentlichen Teil und ein privaten Teil geteilt wird. Dabei herrscht eine eindeutige Zuordnung zwischen den Teilen.
+    Danach besitzt der Teilnehmer A ein öffentlichen Schlüssel $E$ und einen privaten Schlüssel $D$. Er kann nun den öffentlichen Schlüssel $E$ zusammen mit $N$ veröffentlichen. $E$ zusammen mit $N$ und $D$ sind ein Schlüsselpaar welches in einen öffentlichen Teil und ein privaten Teil geteilt wird. Dabei herrscht eine eindeutige Zuordnung zwischen den Teilen.
     
     \subsection{Verschlüsselung} \label{sec-RSA-crypt}
-        Wenn Teilnehmer B eine verschlüsselte Nachricht $m$ an Teilnehmer A senden will, braucht er hierfür den öffentlichen Schlüssel von A. Dabei B  verschlüsselt wie folgt, wobei $c$ der resultierende Geheimtext ist.
+        Wenn Teilnehmer B eine verschlüsselte Nachricht $M$ an Teilnehmer A senden will, braucht er hierfür den öffentlichen Schlüssel von A. $M$ muss aber dabei kleiner als $N$ sein. Dabei B  verschlüsselt wie folgt, wobei $C$ der resultierende Geheimtext ist.
 
         \begin{equation}
-            m^{e_{A}} \pmod n = c
+            M^{E_{A}} \pmod N = C
             \eqlabel{eq-rsa-encrypt}{RSA - Verschlüsselung einer Nachricht}
         \end{equation}
 
-        Wenn Teilnehmer A den Geheimtext $c$ von B erhält, entschlüsselt er diesen mit seinem privaten Schlüssel. Dadurch berechnet er die von Teilnehmer B verschlüsselte Nachricht $m$.
+        Wenn Teilnehmer A den Geheimtext $C$ von B erhält, entschlüsselt er diesen mit seinem privaten Schlüssel. Dadurch berechnet er die von Teilnehmer B verschlüsselte Nachricht $M$.
 
         \begin{equation}
-            c^{d_{A}} \pmod n = m
+            C^{D_{A}} \pmod N = M
             \eqlabel{eq-rsa-decrypt}{RSA - Entschlüsselung eines Geheimtextes}
         \end{equation}
 
-        Da $d$ privat und eindeutig für den öffentlichen Teil des Schlüsselpaars ist, können nur Teilnehmer, die über $d$ verfügen, Nachrichten entschlüsseln, die mit dem zugehörigen öffentlichen Teil verschlüsselt wurden.
+        Da $D$ privat und eindeutig für den öffentlichen Teil des Schlüsselpaars ist, können nur Teilnehmer, die über $D$ verfügen, Nachrichten entschlüsseln, die mit dem zugehörigen öffentlichen Teil verschlüsselt wurden.
     
     \subsection{Signatur} \label{sec-RSA-sign}
         Das RSA-Verfahren ermöglicht auch das Signieren von Nachrichten. Dies wird z.B. im Internet genutzt um Teilnehmer zu authentifizieren und Nachrichtenintegrität zu sichern. RSA wird jedoch meist nur auf kleinere Nachrichten wie Fingerabdrücke angewandt.
 
-        Signatur $s$ einer Nachricht $m$ von Teilnehmer A:
+        Signatur $S$ einer Nachricht $M$ von Teilnehmer A:
         \begin{equation}
-            m^{d_{A}} \pmod n = s
+            M^{D_{A}} \pmod N = S
             \eqlabel{eq-rsa-sign}{RSA - Signieren einer Nachricht}
         \end{equation}
 
         Zum Überprüfen der Echtheit braucht der Teilnehmer B den öffentlichen Schlüssel von A:
         \begin{equation}
-            s^{e_{A}} \pmod n = m
+            S^{E_{A}} \pmod N = M
             \eqlabel{eq-rsa-check_sign}{RSA - Prüfen einer Signatur}
         \end{equation}
 
         Eine Signatur kann eindeutig Teilnehmer A zugeordnet werden, da nur ein Teilnehmer im Besitz von $d_{A}$ eine Signatur einer Nachricht erstellen kann, die mit dem öffentlichen Teil des Schlüsselpaars von A überprüft werden kann.
     
-    
+\section{Annahmen} \label{sec-RSA-assertion}
+        Das Ergebnis einer \ac{RSA}-Verschlüsselung wird als Zufallszahl betrachtet. Grundlage hierfür ist, dass RSA mit sicheren Schlüsseln und Implementation, einer Einweg-Funktion gleicht, wenn der private Schlüssel nicht bekannt ist. Das Ergebnis einer \ac{RSA}-Verschlüsselung ist folgendermaßen die Generierung einer Zufallszahl $C$:
+        \begin{equation}
+            C \in [1,N)
+            \eqlabel{eq-rsa-random}{RSA-Verschlüsselung EInwegfunktion}
+        \end{equation}
+        % Kann C 0 oder 1 sein? 
+        Diese Annahme ist für die mathematische Betrachtung von möglichen Grenzfälle später relevant. Im kryptographischen Kontext, kann natürlich die Einwegfunktion mit Kenntnis des privaten Schlüssels effizient umgekehrt werden.
 
 \section{Sicherheit}
     Die Sicherheit des RSA-Verfahrens basiert auf zwei mathematischen Problemen, welche unter Aufwand endlicher Ressourcen, nicht gelöst werden können. Hierbei wird sich sowohl auf RSA-gestützte Verschlüsselungs- und Signaturverfahren bezogen.
     Diese zwei Probleme sind:
     \begin{itemize}
-        \item Faktorisierung einer bekannten Zahl, welche das Produkt zweier großer Primzahlen ist. Im Kontext von RSA ist diese Zahl mit $n$ repräsentiert.
+        \item Faktorisierung einer bekannten Zahl, welche das Produkt zweier großer Primzahlen ist. Im Kontext von RSA ist diese Zahl mit $N$ repräsentiert.
         \item Bestimmung des diskreten Logarithmus. Bei RSA wäre dies die Bestimmung von 
         \begin{equation}
-            d \mid m^{d} \equiv c \pmod n .
+            D \mid M^{D} \equiv C \pmod N .
         \end{equation}
     \end{itemize}
 
@@ -84,7 +91,3 @@
     \subsection{Angriffe auf RSA}
     % Momentane Angriffe auf RSA
     % RSA ist momentan als sicher bekannt
-    % Erwähnung von Side Channel Angriffen
-           
-
-

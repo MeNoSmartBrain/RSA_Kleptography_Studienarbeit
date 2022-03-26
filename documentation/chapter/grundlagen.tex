@@ -81,19 +81,18 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
 
 
 \section{Mathematik}
-    \subsection{Primzahlen}
-    \label{sec-prim}
+    \subsection{Primzahlen} \label{sec-prim}
         Primzahlen werden in mehreren asymmetrischen Verfahren genutzt. Im Rahen dieser Arbeit wird die Menge aller Primzahlen als $\mathbb{P}$. definiert. Wenn eine Zahl prim ist, ist diese Element von $\mathbb{P}$. 
-
-    % TODO
-    % Chiffre vs Chiffrat
     
-    % Wahrscheinlichkeit dass Zufallszahl gleich prim
-    % Laufzeit für die Generierung von Primzahlen
-    % Laufzeit für Primzahltest
-    % Definition von prim
-
-    % p für Keine modulare Multiplikative Inverse
+    \subsection{Konkatenation} \label{sec-bas-concat}
+        Im Rahmen der Arbeit wird die Konkatenation von zwei Zahlen durch $||$ repräsentiert. Dabei werden die Zahlen in binärer Form (zur Basis 2) konkateniert, wobei beide Zahlen auf ihre maximale binäre Länge mit $0$ ergänzt werden. 
+        \begin{equation}
+            (a || b) = 010001 \mid a = 10, b=1, \overline{a}, \overline{b}  = 3
+            \eqlabel{eq-math-||}{Normaler Logarithmus}
+        \end{equation}
+    
+    \subsection{Binäre Länge} \label{sec-bas-lenBin}
+        Im Rahmen der Arbeit wird die maximale Länge einer Zahl in Bits durch einen Überstrich $\overline{x}$ dargestellt. Für eine Zahl $x$ mit maximal $n/2$-Bits Länge würde dann gelten $\overline{x} = n/2$.
 
     Mathematische Probleme stellen die Grundlage für moderne Kryptographie. 
 
@@ -138,7 +137,7 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
     \label{sec-Effiziente Berechnung der diskreten Exponentialfunktion}
         In der Kryptographie werden große Zahlen genutzt, um die Sicherheit der verwendeten Algorithmen zu gewährleisten. Hierfür wird als Beispiel angenommen, dass als Basis $z$ eine 256-bit Lange Zahl hoch einem 300-bit langem Exponenten $x$ genommen werden soll. Hierbei ist $n$ 1024-bit lang. 
 
-        Wenn mann nun $z$ in Byte berechnet wäre dies eine 32 Byte lange Zahl.
+        Wenn man nun $z$ in Byte berechnet wäre dies eine 32 Byte lange Zahl.
 
         $x$ entspricht einer ungefähr 90. stelligen Zahl. 
 
@@ -182,28 +181,30 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
         \end{equation}
         
         \subsubsection{Allgemein}
-        Gegeben mit gesucht $y$:
-        \begin{equation}
-            z^{x} \pmod n \equiv y
-        \end{equation}
+            Gegeben mit gesucht $y$:
+            \begin{equation}
+                z^{x} \pmod n \equiv y
+            \end{equation}
 
-        Zerlegung von $x$ eine Summe von Zweierpotenzen:
-        \begin{equation}
-            x = 2^{0} + 2^{1} + 2^{2} + ...
-        \end{equation}
+            Zerlegung von $x$ eine Summe von Zweierpotenzen:
+            \begin{equation}
+                x = 2^{0} + 2^{1} + 2^{2} + ...
+            \end{equation}
 
-        Dabei bilden die binären Logarithmen der einzelnen Zweierpotenzen die Menge $\mathbb{K}$.
+            Dabei bilden die binären Logarithmen der einzelnen Zweierpotenzen die Menge $\mathbb{K}$.
 
-        Berechnung der einzelnen Faktoren durch iteratives Square-and-Multiply-Verfahren. Dies wird bis $f(max(\mathbb{K}))$ berechnet. $max(\mathbb{K})$ steht hier für das Element von $\mathbb{K}$, mit dem größten Wert.
-        \begin{equation}
-            f(i+1) = f(i)^{2} \pmod n \mid f(1) = z^{1} \pmod n 
-        \end{equation}
+            Berechnung der einzelnen Faktoren durch iteratives Square-and-Multiply-Verfahren. Dies wird bis $f(max(\mathbb{K}))$ berechnet. $max(\mathbb{K})$ steht hier für das Element von $\mathbb{K}$, mit dem größten Wert.
+            \begin{equation}
+                f(i+1) = f(i)^{2} \pmod n \mid f(1) = z^{1} \pmod n 
+            \end{equation}
 
-        Zuletzt wird das Produkt, aller Ergebnisse von $f(x)$ für die Elemente der Menge $\mathbb{K}$, gebildet. Dabei gilt:
+            Zuletzt wird das Produkt, aller Ergebnisse von $f(x)$ für die Elemente der Menge $\mathbb{K}$, gebildet. Dabei gilt:
 
-        \begin{equation}
-            \prod_{k \in \mathbb{K}} f(k) \equiv z^{x} \pmod n \equiv y
-        \end{equation}
+            \begin{equation}
+                \prod_{k \in \mathbb{K}} f(k) \equiv z^{x} \pmod n \equiv y
+            \end{equation}
+
+    
 
 \section{Komplexitätstheorie}
     Die Komplexitätstheorie befasst sich mit der Komplexität von Problemen, welche durch Algorithmen gelöst werden. Dabei wird der Speicherbedarf und der Zeitaufwand eines Algorithmus. Schrankenfunktionen werden gebildet durch die Betrachtung des Speicherbedarf und des Zeitaufwands im Bezug auf die Länge der Eingabeparameter. Da hier eine reine kryptographische Betrachtung der Schrankenfunktionen stattfinden soll, wird hier nur in zwei verallgemeinerte Schrankenfunktionen \footcite[178]{BSW.2015} unterschieden:
