@@ -54,16 +54,16 @@ class Key:
             try:
                 Q = int(prime.gen_prime_in_bounds(lower_bound_Q, upper_bound_Q))
                 created = True
-                print(vP)
-            except ValueError:
-                print("Margin to small")
+                #print(vP)
+            except (ValueError, TypeError):
+                #print("Margin to small")
                 pass
 
         PhiN = rsaUtil.calc_phi_n(P, Q)
         N = rsaUtil.calc_n(P, Q)
 
-        print("True:", rsaUtil.to_binary(vP))
-        print("True:", rsaUtil.to_binary(N))
+        #print("True:", rsaUtil.to_binary(vP))
+        #print("True:", rsaUtil.to_binary(N))
 
         created = False
         while not created:
@@ -72,8 +72,9 @@ class Key:
                 D = rsaUtil.modular_multiplicative_inverse(E, PhiN)
                 created = True
             except ValueError:
-                print("Trying to generate Key failed. Trying again ...")
-        print("User Key successfully generated!")
+                pass
+                #print("Trying to generate Key failed. Trying again ...")
+        #print("User Key successfully generated!")
 
         self.set_key_params(P, Q, PhiN, N, E, D)
 

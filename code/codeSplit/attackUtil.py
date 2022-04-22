@@ -29,6 +29,7 @@ class AttackUtil:
         self.vP2 = self.vP1 + 1
 
         print("Extracted:", self.vP1)
+        print("Extracted:", self.vP2)
         # print("Extracted:", rsaUtil.to_binary(self.public_N))
         # print("Extracted:", rsaUtil.to_binary(self.vP1))
         # print("Extracted:", rsaUtil.to_binary(self.vP2))
@@ -40,12 +41,15 @@ class AttackUtil:
         Q1 = self.public_N / P1
         Q2 = self.public_N / P2
 
+        print("Extracted:", P1)
+        print("Extracted:", P2)
+
         if Q1.is_integer():
             self.P = P1
-            self.Q = Q1
+            self.Q = int(Q1)
         elif not Q1.is_integer() and Q2.is_integer():
             self.P = P2
-            self.Q = Q2
+            self.Q = int(Q2)
         else:
             print("Prime factors couldn't be recovered. Either non compromised publicKey or programming error!")
             raise
