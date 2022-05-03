@@ -20,7 +20,19 @@
         \subsection{Secretly Embedded Trapdoor with Universal Protection}
         % Beschreibung des SETUPS
 
-    \section{SETUP für RSA}
+    \section{Secretly Embedded Trapdoor with Universal Protection für RSA}
+        Der folgende Abschnitt zeigt einen kleptographischen Angriff auf eine Implementation des \ac{RSA}-Algorithmus. Dabei wird die in der Literatur gegebene Vorgehensweise in vier Schritte aufgegliedert:
+        \begin{enumerate}
+            \item Die Voraussetzung für einen erfolgreichen Angriff und die gegebenen Werte.
+            \item Der Angriff, wobei die Parameter des Systems manipuliert werden.
+            \item Die gängige Generierung des Schlüsselpaars aus den manipulierten Werten.
+            \item Die Vorgehensweise eines Angreifers, welcher aus den öffentlichen Parameter des Schlüsselpaars, die Primfaktoren ableitet und das gesamte Schlüsselpaar rekonstruiert.
+        \end{enumerate}
+        Darauf werden die in den einzelnen Schritten verwendeten Parameter mathematisch definiert. Dabei sind die Definitionen nicht ausschließlich der Literatur entnommen. Eigene Definitionen wurden hinzugefügt um Grenzfälle auszuschließen, welche in der Literatur nicht beachtet werden. Dies soll die Implementation und die Reproduzierbarkeit erleichtern und verbessern. 
+        Zuletzt werden Hintergründe zur Implementierung des SETUPS beschrieben. Diese sollen die Vorgehensweise und die Korrektheit des Verfahrens aufzeigen.
+
+        Hierbei ist es wichtig zu sagen, dass die hier aufgezeigte Vorgehensweise nur zu Teilen der später folgenden Implementation entspricht. Dies ist der Fall, da die hier beschriebene Vorgehensweise wenig bis gar nicht optimiert ist.
+
         \subsection{Voraussetzungen}
             Für ein \ac{SETUP}-Angriff auf eine Implementation von \ac{RSA} hat der Angreifer ein eigenes Schlüsselpaar: $N_{A}$ Modulus des Angreifers, $E_{A}$ Öffentlicher Schlüssel des Angreifers, $D_{A}$ Privater Schlüssel des Angreifers. Das Schlüsselpaar wird wie für \ac{RSA} üblich generiert.
         
@@ -44,7 +56,7 @@
                 \eqlabel{eq-SETUP-Q}{Berechnung der zweiten Primzahl P}
             \end{equation}
 
-            Ab diesem Schritt ist die Generierung des \ac{RSA}-Schlüsselpaar identisch zur Generierung in einem unkomprimierten Kryptosystem. Hierzu ist anzumerken, dass die kompromittierten Parametern nicht von unkompromittierten Parametern zu unterscheiden sind. Dies bildet die Grundlage des Prinzips eines \ac{SETUP}.
+            Ab diesem Schritt ist die Generierung des \ac{RSA}-Schlüsselpaar identisch zur Generierung in einem unkomprimierten Kryptosystem. Hierzu ist anzumerken, dass die kompromittierten Parametern nicht von unkompromittierten Parametern zu unterscheiden sind. Dies bildet die Grundlage des Prinzips eines \ac{SETUP}. Es ist anzumerken, dass für gegebene Parameter $P, N'$ diese Gleichung keine Lösung hat. Dies liegt unter anderem am Definitionsbereich von $R$ (siehe \ref{Parameterdefinitionen}). Falls dieser Fall eintritt soll nach Literatur mit \ref{sec-Schritt-Gen 1} wieder begonnen werden.
         
         \subsection{Schlüsselgenerierung mit kompromittierten Parametern}
             \paragraph{Schritt 1} \label{sec-Schritt-Gen 4} Bestimmung des Modulus $N$, wie für \ac{RSA} üblich durch:
@@ -84,12 +96,12 @@
             \paragraph{Schritt 4} \label{sec-Schritt-Ang 4} Hiermit ist der Angreifer im Besitz des ersten Primfaktors $P$ oder $P'$. Somit ist die Primfaktorzerlegung von $N$ trivial:
             \begin{equation}
                 Q = N / P
-                \eqlabel{eq-SETUP-Q}{Primfaktorzerlegung für P}
+                \eqlabel{eq-SETUP-Q1}{Primfaktorzerlegung für P}
             \end{equation}
             Die Primfaktorzerlegung muss, gleich wie bei \ref{sec-Schritt-Ang 3}, für den alternativen Primfaktor $P'$ berechnet werden:
             \begin{equation}
                 Q' = N / P'
-                \eqlabel{eq-SETUP-Q}{Primfaktorzerlegung für P'}
+                \eqlabel{eq-SETUP-Q2}{Primfaktorzerlegung für P'}
             \end{equation}
             Durch die Optimierung in \ref{sec-kep-optQ} kann der richtige Primfaktor bestimmt werden.
 
@@ -97,7 +109,7 @@
 
             \paragraph{Schritt 6} \label{sec-Schritt-Ang 6} Der Angreifer besitzt den privaten und öffentlichen Schlüssel. Somit können Chiffren entschlüsselt und Signaturen gefälscht werden. Dabei muss der Angreifer, wenn noch nicht geschehen, den privaten Schlüssel $D$ und den alternativen privaten Schlüssel $D'$ einmalig testen, um den richtigen zu bestimmen.
         
-        \subsection{Parameterdefinitionen}
+        \subsection{Parameterdefinitionen} \label{Parameterdefinitionen}
             In diesem Abschnitt werden die einzelnen Parameter und deren Bedingungen definiert. Diese Definitionen könne auch aus den obigen Schritten entnommen werden. Es wird sich hier für eine wiederholte Aufführung entschieden, um mit einer Übersicht der Verständlichkeit zu helfen, die Reproduzierbarkeit zu steigern und Definitionslücken klarzustellen, welche in Literatur zu diesem Angriff gefunden wurden. Wenn die Definitionslücken in der Implementation nicht beachten werden, kann es zu Fehlern bei der Ausführung kommen. Für die Notation beachte \ref{sec-prim}, \ref{sec-bas-concat} und \ref{sec-bas-lenBin}.
 
             \paragraph{Schlüssel des Angreifer} muss die halbe Länge des Schlüsselgenerators haben.
@@ -120,17 +132,10 @@
                 N' = vP || t
             \end{equation}
 
-            \paragraph{Q} ist der zweite Primfaktor. Jedoch wird er nicht wie üblich generiert sondern aus den Parametern $P$ und $N'$ berechnet. Dabei ist kann das Interval in dem $Q$ liegt begrenzt werden. 
+            \paragraph{Q} ist der zweite Primfaktor. Jedoch wird er nicht wie üblich generiert sondern aus den Parametern $P$ und $N'$ berechnet.
             
-            Dabei wird kann eine untere Schranke gesetzt werden indem $R$, dem maximalen für $\overline{R} = (n/2)$ Wert annimmt.
             \begin{equation}
-                maxR = 2^{(\overline{R}+1)} -1
-            \end{equation} 
-            Für die obere Schranke wird $minR = 0$ gesetzt.
-            
-            Dadurch gilt für $Q$:
-            \begin{equation}
-                Q : N' = P \cdot Q + R \mid P \in \mathbb{P} \wedge Q \in [(N'-maxR)/Q, (N'-minR)/Q]
+                Q : N' = P \cdot Q + R \mid Q \in \mathbb{P} \wedge \overline{R} = (n/2)
             \end{equation}
 
             \paragraph{N} $N$ ist das Produkt der Primzahl $P$ und $Q$. Dadurch sind die einzigen Teiler von $N$, $P$ oder $Q$. Dabei gilt $\overline{N} = n$.
@@ -143,7 +148,6 @@
             \end{equation}
 
             \paragraph{M, C, S}, also jegliche Eingabe in eine \ac{RSA}-Operation muss kleiner $N$ sein.
-            
 
         \subsection{Hintergründe zum RSA-SETUP}
             \subsubsection{Informationsgewinnung von vP aus N} \label{sec-SETUP-vP_from_N}
@@ -156,51 +160,4 @@
             Zudem ist definiert, dass die höherwertigen von $N'$ gleich $vP$ sind (siehe \ref{eq-SETUP-N'}).
             Da der Angreifer nur $N$ aber nicht auch $R$ kennt, muss die Möglichkeit eines Überlauf durch $R$ berücksichtigt werden. 
             Aufgrund dessen kann der Angreifer $vP$ aus den höherwertigen Bits von $N$ lesen. Muss aber auch $vP + 1$ als Option berücksichtigen, da er nicht weiß, ob ein Überlauf stattgefunden hat.               
-
-        \subsection{Verfahren zur Bestimmung der korrekten Primfaktoren}
-            Die Schritte 3 bis 6 der Extraktion der geheimen Parameter befassen sich mit dem Finden des korrekten Primfaktor aus den zwei resultierenden Möglichkeiten von vP $vP$ und $vP+1$. Daraus werden die Werte und ihre Alternativen für $P$, $N$, $Q$ und $D$ berechnet. 
-            Um schlussendlich zu entscheiden, ob die Werte die aus $vP$ oder $vP+1$, kann eine Signatur mit $D$ und $D'$ mit einer Signatur des Angriffsziels verglichen werden. Dadurch kann eine eindeutige Entscheidung getroffen werden. 
-
-            Diese Entscheidung kann jedoch unter Umständen früher berechnet werden. Dieser Fall kann bei folgenden Berechnungsschritten  auftreten:
-
-            \subsubsection{Berechnung von P}
-                $P$ wird berechnet indem $vP$ mittels dem privaten Schlüssel $D_{A}$ des Angreifers entschlüsselt wird. Dabei sollte, wie für eine \ac{RSA}-Ver-/Entschlüsselung üblich, eine vollkommen zufällige Zahl resultieren. Jedoch ist es eine Bedingung, dass $P$ prim ist. 
-                Die Wahrscheinlichkeit, dass eine Zufallszahl, mit steigender Anzahl an Stellen, prim ist sehr gering. 
-                Mathematische Erläuterung %ref
-
-                Falls das entschlüsselte $P$ nicht prim ist, muss es die Alternative $P'$ sein. Gleiches gilt wiederum auch für $P'$.
-
-            \subsubsection{Berechnung von Q} \ref{sec-kep-optQ}
-                Bei der Berechnung von $Q$ gilt die gleiche Eigenschaft, wie bei $P$, dass $Q$ prim seien muss.
-
-                Jedoch kann bei der Berechnung von $Q$ eine eindeutige Entscheidung getroffen werden. Der Grund dafür ist, dass $Q$ eine ganze Zahl seien muss, also $Q \in \mathbb(Z)$. 
-                Ohne weitere geltende Bedingungen wäre die Überprüfung von $Q = N/P$ und $Q' = N/P'$ auf 
-                \begin{equation}
-                    \text{Correct prime factors} =
-                    \begin{cases}
-                        (P, Q) & Q \in Z \wedge Q' \notin \mathbb(Z) \\
-                        (P', Q') & Q' \in Z \wedge Q \notin \mathbb(Z) \\
-                        (P, Q) & sonst
-                    \end{cases}
-                    \eqlabel{eq-OPT-Q}{Optimierung für die Bestimmung von Q}
-                \end{equation}
-                Ohne geltende Bedingungen von \ac{RSA} könnte $Q, Q' \in \mathbb(Z)$ gelten. Da $N$ ein vielfaches beider Zahlen $P$ und $P'$ seien kann. Jedoch ist $N$ in \ac{RSA} das Produkt von zwei Primzahlen. Dadurch gibt es zwei Zahlen $x$ für die gilt $ (N/x) \in \mathbb(Z) $. Dabei handelt es sich um die korrekten Primfaktoren $P$ und $Q$. Dadurch gilt immer nur einer der beiden Fälle in \ref{eq-OPT-Q}. 
-                Im Fall 1 ist $ (N/P) \in \mathbb{Z}$, während $N$ kein vielfaches von $P'$ ist.
-                Umgekehrtes gilt für Fall 2.
-                Der dritte Fall wird dennoch benötigt. Er tritt ein, wenn $Q' = P$ oder $Q = P'$ gilt. 
-                Dieser Fall tritt dann ein, wenn $(P^{E} + 1)^{D} \mod N = Q$ gilt. Unter der Annahme, dass die Entschlüsselung einer Hash-Funktion gleich, tritt dieser Fall mit einer Wahrscheinlichkeit von $p(1/N)$ auf. 
-                Dieser sehr unwahrscheinliche Fall wird durch Fall 3 von \ref{eq-OPT-Q} abgedeckt. In diesem Fall wird eine der beiden Möglichkeiten ausgewählt, da durch die Kommutativität der Multiplikation es egal ist, ob $[P, Q] \vee [Q, P]$ die richtigen Primfaktoren von $N$ sind.
-
-                Durch \ref{eq-OPT-Q} kann sehr einfach und effizient die richtigen Primfaktoren ausgewählt werden. Diese Überprüfung hat keinen Einfluss auf die Laufzeit des Algorithmus.
-
-                Somit ist diese Überprüfung nicht nur eindeutiger als eine Überprüfung von $P$ auf prim, sondern auch effizienter.
-
-            \subsubsection{Fehler bei der modularen multiplikativen Inverse}
-                Bei der Berechnung von $D$ wird die modulare multiplikative Inverse von $E$ und $\phi(N)$ bestimmt. Dabei kann es zu einem Fehler kommen, da für den Tupel von $E$ und $\phi(N)$ möglicherweise keine modulare multiplikative Inverse existiert.
-
-        Durch die Optimierung bei der Bestimmung der richtigen Primfaktoren verspricht, soll die Berechnungszeit verkürzt werden. Zudem müssten ohne irgendeine der hier genanten Optimierung, zur Bestimmung eine Signatur erstellt und verglichen werden oder ein Chiffrat entschlüsselt werden. Dies setzt jedoch vor, dass der Angreifer im Besitzt dieser Daten ist. Am meisten bei einem verbreiteten / großflächigen, kann dies anspruchsvoll sein. Eine Voraussetzung ist also eine minimale Form eines Known Cipher Attacks (siehe \ref{sec-Kryptoanalyse}).
-        Um diese Voraussetzung zu eliminieren können diese Optimierungen eingesetzt werden. 
-        Dabei ist die Optimierung bei der Berechnung von Q (ob Q ganzzahlig ist) am meisten geeignet, da diese im Gegensatz zu den beiden anderen Optimierungen immer klappt und im Gegensatz zu der Optimierung durch Bestimmung, ob ein Parameter prim ist, keine weitere Laufzeit dem Algorithmus hinzufügt.
-        Durch diese Optimierung kann ein Angreifer effizient die geheimen Parameter bestimmen, ohne im Besitz von zusätzlichen Chiffraten oder Signaturen sein.
-             
-    
+ 

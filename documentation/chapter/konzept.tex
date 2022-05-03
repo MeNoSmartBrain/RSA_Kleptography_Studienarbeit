@@ -2,6 +2,16 @@
 
     \section{Ziel}
         Folgender Abschnitt der Arbeit, befasst sich mit der Auswahl des Ziels für einen kleptographischen Angriff. Hierbei soll es sich um eine Softwarebibliothek handeln. Zudem soll diese Open-Source und hinreichend verbreitet sein. Die zugrundeliegende Programmiersprache soll abstrakt genug sein, dass die kryptographischen Operationen in Software abgebildet werden. Programmiersprachen, welche Hardware, wie \ac{TPM} nutzten, sind nicht für einen Angriff auf Softwarebibliotheken weniger geeignet.
-        % Was ist das Ziel?
-        % Nach welchen Kriterien 
-        % Wieso Python / OpenRSA
+
+        Als Programmiersprache wurde für die Implementation Python gewählt, weil Python weit verbreitet ist, eine Vielzahl an Open Source Libraries und die Syntax nah an Pseudocode liegt. Somit kann die Implementation leichter verstanden und schneller in andere Sprachen übersetzt werden. Zudem besitzt Python einfach integrierte Funktionen für die Berechnung diskreter Exponentialfunktionen. Python ist zudem in der Lage vor der Kompilierung / Interpretierung und während der Laufzeit Funktionen zu Überschreiben. Python kann zudem objektorientiert verwendet werden, was bei der Abstraktion des Codes hilft und somit die Verständlichkeit fördert. Da der \ac{RSA}-Algorithmus mit großen ganzen Zahlen arbeiten muss bietet Python ein Vorteil im Gegensatz zu Alternativen wie Java, indem der zu Verfügung stehende Datentype int unbounded als von seiner Speicherlänge nicht begrenzt ist. In Java würde ein int maximal 32-bit Länge haben, was nicht ausreichend für jeglichen \ac{RSA}-Algorithmus ist. Zudem ist eine Deklaration von Datentypen in Python nicht nötig. 
+
+        Als Angriffsziel wurde das PIP-Packet "rsa" gewählt. Dabei handelt es sich um eine Open Source Software Packet von Sybren A. Stüvel, welches den \ac{RSA}-Algorithmus und Hilfsfunktionalitäten komplett in Python implementiert. Dieses Packet wurde aufgrund der Beleibtheit ausgewählt. Es wird unter dem Namen "python-rsa" auf Git-hub gepflegt. Die Bearbeitung des Packet wurde mit dem Entwickler Sybren A. Stüvel abgesprochen.
+
+        Nach Betrachtung des Aufbaus des Angriffsziels wurde sich dafür entschieden die Datei key.py manipulieren. Diese Python-Datei verwaltet die Generierung der Schlüssel(-parameter).
+    
+    \section{Angriffsvektoren}
+        Die hier aufgeführten Angriffsvektoren beschreiben, wie ein kryptographisches System kompromittiert werden kann.
+
+        \subsection{Kryptotrojaner}
+
+        \subsection{Dependency Confusion}

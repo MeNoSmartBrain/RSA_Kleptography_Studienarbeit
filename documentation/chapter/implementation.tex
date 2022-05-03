@@ -1,2 +1,60 @@
 \chapter{Implementation}
     Es folgt die konkrete Implementation einer kleptographsichen Schwachstelle in die ausgewählte Softwarebibliothek.
+
+    \section{Optimierung}
+        \subsection{Berechnung von Q}
+            Es wird aufgezeigt, wie die Berechnung des manipulierten Primfaktors $Q$ optimiert werden kann. Dabei soll möglichst vermieden werden, dass ein komplette Neugenerierung ab \ref{sec-Schritt-Gen 1} stattfinden muss. Dafür werden \ref{sec-Schritt-Gen 2} und \ref{sec-Schritt-Gen 3} verändert. Dafür wird sich zu nutze gemacht, dass die beiden Zufallszahlen $t$ und $R$ die gleiche Bitlänge haben und sich auf die gleichen Stellen von $N'$ auswirken / Bezug nehmen. Dadurch ist es möglich das Interval in dem $Q$ liegt in Bezug auf die Parameter $t$ und $R$ zu maximieren. 
+            Danach kann das Suchintervall für den Primfaktor $Q$ stark eingeschränkt werden. Dieser Bereich kann dann in wenig Zeitaufwand nach Primzahlen durchsucht werden. Jede Primzahl im Interval ist dabei eine gültige Lösung für $Q$. Zudem wird betrachtet, wie das Interval vergrößert werden kann. Dies erhöht zwar den Suchbereich, aber steigt auch die Chance, dass in dem Interval eine Primzahl liegt.
+
+        \subsection{Verfahren zur Bestimmung der korrekten Primfaktoren}
+
+            Die Schritte 3 bis 6 der Extraktion der geheimen Parameter befassen sich mit dem Finden des korrekten Primfaktor aus den zwei resultierenden Möglichkeiten von vP $vP$ und $vP+1$. Daraus werden die Werte und ihre Alternativen für $P$, $N$, $Q$ und $D$ berechnet. 
+            Um schlussendlich zu entscheiden, ob die Werte die aus $vP$ oder $vP+1$, kann eine Signatur mit $D$ und $D'$ mit einer Signatur des Angriffsziels verglichen werden. Dadurch kann eine eindeutige Entscheidung getroffen werden. 
+
+            Diese Entscheidung kann jedoch unter Umständen früher berechnet werden. Dieser Fall kann bei folgenden Berechnungsschritten  auftreten:
+
+            \subsubsection{Berechnung von P}
+                $P$ wird berechnet indem $vP$ mittels dem privaten Schlüssel $D_{A}$ des Angreifers entschlüsselt wird. Dabei sollte, wie für eine \ac{RSA}-Ver-/Entschlüsselung üblich, eine vollkommen zufällige Zahl resultieren. Jedoch ist es eine Bedingung, dass $P$ prim ist. 
+                Die Wahrscheinlichkeit, dass eine Zufallszahl, mit steigender Anzahl an Stellen, prim ist sehr gering. 
+                Mathematische Erläuterung %ref
+
+                Falls das entschlüsselte $P$ nicht prim ist, muss es die Alternative $P'$ sein. Gleiches gilt wiederum auch für $P'$.
+
+            \subsubsection{Berechnung von Q} \label{sec-kep-optQ}
+                Bei der Berechnung von $Q$ gilt die gleiche Eigenschaft, wie bei $P$, dass $Q$ prim seien muss.
+
+                Jedoch kann bei der Berechnung von $Q$ eine eindeutige Entscheidung getroffen werden. Der Grund dafür ist, dass $Q$ eine ganze Zahl seien muss, also $Q \in \mathbb(Z)$. 
+                Ohne weitere geltende Bedingungen wäre die Überprüfung von $Q = N/P$ und $Q' = N/P'$ auf 
+                \begin{equation}
+                    \text{Correct prime factors} =
+                    \begin{cases}
+                        (P, Q) & Q \in Z \wedge Q' \notin \mathbb(Z) \\
+                        (P', Q') & Q' \in Z \wedge Q \notin \mathbb(Z) \\
+                        (P, Q) & sonst
+                    \end{cases}
+                    \eqlabel{eq-OPT-Q}{Optimierung für die Bestimmung von Q}
+                \end{equation}
+                Ohne geltende Bedingungen von \ac{RSA} könnte $Q, Q' \in \mathbb(Z)$ gelten. Da $N$ ein vielfaches beider Zahlen $P$ und $P'$ seien kann. Jedoch ist $N$ in \ac{RSA} das Produkt von zwei Primzahlen. Dadurch gibt es zwei Zahlen $x$ für die gilt $ (N/x) \in \mathbb(Z) $. Dabei handelt es sich um die korrekten Primfaktoren $P$ und $Q$. Dadurch gilt immer nur einer der beiden Fälle in \ref{eq-OPT-Q}. 
+                Im Fall 1 ist $ (N/P) \in \mathbb{Z}$, während $N$ kein vielfaches von $P'$ ist.
+                Umgekehrtes gilt für Fall 2.
+                Der dritte Fall wird dennoch benötigt. Er tritt ein, wenn $Q' = P$ oder $Q = P'$ gilt. 
+                Dieser Fall tritt dann ein, wenn $(P^{E} + 1)^{D} \mod N = Q$ gilt. Unter der Annahme, dass die Entschlüsselung einer Hash-Funktion gleich, tritt dieser Fall mit einer Wahrscheinlichkeit von $p(1/N)$ auf. 
+                Dieser sehr unwahrscheinliche Fall wird durch Fall 3 von \ref{eq-OPT-Q} abgedeckt. In diesem Fall wird eine der beiden Möglichkeiten ausgewählt, da durch die Kommutativität der Multiplikation es egal ist, ob $[P, Q] \vee [Q, P]$ die richtigen Primfaktoren von $N$ sind.
+
+                Durch \ref{eq-OPT-Q} kann sehr einfach und effizient die richtigen Primfaktoren ausgewählt werden. Diese Überprüfung hat keinen Einfluss auf die Laufzeit des Algorithmus.
+
+                Somit ist diese Überprüfung nicht nur eindeutiger als eine Überprüfung von $P$ auf prim, sondern auch effizienter.
+
+            \subsubsection{Fehler bei der modularen multiplikativen Inverse}
+                Bei der Berechnung von $D$ wird die modulare multiplikative Inverse von $E$ und $\phi(N)$ bestimmt. Dabei kann es zu einem Fehler kommen, da für den Tupel von $E$ und $\phi(N)$ möglicherweise keine modulare multiplikative Inverse existiert.
+
+            Durch die Optimierung bei der Bestimmung der richtigen Primfaktoren verspricht, soll die Berechnungszeit verkürzt werden. Zudem müssten ohne irgendeine der hier genanten Optimierung, zur Bestimmung eine Signatur erstellt und verglichen werden oder ein Chiffrat entschlüsselt werden. Dies setzt jedoch vor, dass der Angreifer im Besitzt dieser Daten ist. Am meisten bei einem verbreiteten / großflächigen, kann dies anspruchsvoll sein. Eine Voraussetzung ist also eine minimale Form eines Known Cipher Attacks (siehe \ref{sec-Kryptoanalyse}).
+            Um diese Voraussetzung zu eliminieren können diese Optimierungen eingesetzt werden. 
+            Dabei ist die Optimierung bei der Berechnung von Q (ob Q ganzzahlig ist) am meisten geeignet, da diese im Gegensatz zu den beiden anderen Optimierungen immer klappt und im Gegensatz zu der Optimierung durch Bestimmung, ob ein Parameter prim ist, keine weitere Laufzeit dem Algorithmus hinzufügt.
+            Durch diese Optimierung kann ein Angreifer effizient die geheimen Parameter bestimmen, ohne im Besitz von zusätzlichen Chiffraten oder Signaturen sein.
+
+        
+    \section{Code Implementierung}
+        \subsection{Secretly Embedded Trapdoor with Universal Protection}
+
+        \subsection{Bestimmen der Geheimnisse}
