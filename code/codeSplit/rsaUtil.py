@@ -30,9 +30,8 @@ def concatenate_in_binary(prev, tail, rsa_bit_len):
 
 
 def split_in_binary(binary, rsa_bit_len):
-    key_bit_len = int(rsa_bit_len/2)
     binary = to_binary(binary)
-    binary = "0" * (key_bit_len * 2 - len(binary)) + binary
+    binary = "0" * (rsa_bit_len - len(binary)) + binary
     prev = binary[:len(binary) // 2]
     tail = binary[len(binary) // 2:]
     return to_decimal(prev), to_decimal(tail)

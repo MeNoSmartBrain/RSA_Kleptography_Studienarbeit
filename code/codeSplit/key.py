@@ -37,7 +37,21 @@ class Key:
             except ValueError:
                 print("Trying to generate key failed. Trying again ...")
 
-        print("Key successfully generated!")
+    def create_key_given_p_q(self, P, Q):
+        created = False
+        while not created:
+            try:
+                PhiN = rsaUtil.calc_phi_n(P, Q)
+                N = rsaUtil.calc_n(P, Q)
+
+                E = prime.fermat_prime()
+                D = rsaUtil.modular_multiplicative_inverse(E, PhiN)
+
+                self.set_key_params(P, Q, PhiN, N, E, D)
+                created = True
+
+            except ValueError:
+                print("Trying to generate key failed. Trying again ...")
 
     def create_klepto_key(self, attacker_E, attacker_N):
         created = False
@@ -54,16 +68,12 @@ class Key:
             try:
                 Q = int(prime.gen_prime_in_bounds(lower_bound_Q, upper_bound_Q))
                 created = True
-                #print(vP)
             except (ValueError, TypeError):
-                #print("Margin to small")
+                print("Margin to small")
                 pass
 
         PhiN = rsaUtil.calc_phi_n(P, Q)
         N = rsaUtil.calc_n(P, Q)
-
-        #print("True:", rsaUtil.to_binary(vP))
-        #print("True:", rsaUtil.to_binary(N))
 
         created = False
         while not created:
@@ -73,8 +83,7 @@ class Key:
                 created = True
             except ValueError:
                 pass
-                #print("Trying to generate Key failed. Trying again ...")
-        #print("User Key successfully generated!")
+                print("Trying to generate Key failed. Trying again ...")
 
         self.set_key_params(P, Q, PhiN, N, E, D)
 

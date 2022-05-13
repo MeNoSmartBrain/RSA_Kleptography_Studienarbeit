@@ -10,8 +10,20 @@
         Nach Betrachtung des Aufbaus des Angriffsziels wurde sich dafür entschieden die Datei key.py manipulieren. Diese Python-Datei verwaltet die Generierung der Schlüssel(-parameter).
     
     \section{Angriffsvektoren}
-        Die hier aufgeführten Angriffsvektoren beschreiben, wie ein kryptographisches System kompromittiert werden kann.
+        Die hier aufgeführten Angriffsvektoren beschreiben, wie ein kryptographisches System mittels dem hier entwickelten kleptographischen kompromittiert werden kann.
 
-        \subsection{Kryptotrojaner}
+        \subsection{Malware}
+            Malware sind bösartige Programme, welche Computer infizieren. Um den beschriebenen Angriff durchzuführen, muss die Malware in der Lage sein, lokale Dateien oder Pfade zu manipulieren. Ein möglicher Angriff kann wie folgt ablaufen:
+            \begin{enumerate}
+                \item Malware befällt das System
+                \item Kleptographisch infiziertes Package wird heruntergeladen
+                \item Das infizierte Package wird lokal mittel eines Package-Managers unter dem gleichen Namen wie das Original-Package installiert
+                \item Dabei wird die Versionsnummer artifiziell hoch gesetzt, damit das Package immer bei "latest" genutzt wird
+                \item Wenn lokale Programme nun das Package importieren, wird das kompromittierte Package verwendet
+            \end{enumerate}
+            Für diesen Angriff sind temporäre Schreibrechte auf dem System eine Mindestanforderung. Dadurch stellt sich die Frage, ob in diesem Fall andere Angriff auch bzw. besser geeignet sind. Ein Vorteil dieses Angriffes ergibt sich aus der Unübersichtlichkeit der von Dependency Chains. Zudem ist ein solcher Angriff vorteilhaft, wenn der Netzwerkverkehr des kompromittierten Systems überwacht wird. Eine solche Sicherheitsmaßnahme wäre keine Auswirkung, da die Rückgewinnung der Schlüsselparameter auf der selbstständigen Veröffentlichung des öffentlichen Schlüssels beruht.
 
         \subsection{Dependency Confusion}
+            Als Dependency Confusion, werden Angriffe beschrieben, welche Versuchen durch Manipulation des Systems oder des Nutzers, eine bösartige Dependency in ein System einzuschleusen. Dies kann einerseits durch Veröffentlichung eines Packages mit ähnlichen Namen erfolgen oder durch das Vortäuschen neuerer Versionen. Hierfür könnte der Angreifer z.B. für das RSA Package von python "rsa":ein manipuliertes Package unter dem Namen "pyrsa" oder "rsa2". Dies könnte neue Nutzer dazu täuschen, das kompromittierte Package zu nutzen. Durch die Dependency Chain gilt das gleiche auch für Entwickler von Packages, welche eine RSA-Implementation benötigen. Falls es einem Angreifer gelingt, dass das kompromittierte Package eine Dependency eines anderen Packages wird, werden damit auch alle Packages und Nutzer kompromittiert, welche von dem Package mit der "schlechten" Dependency abhängig sind.
+
+            Eine weitere Möglichkeit ist die Manipulation des Original-Packages. Dabei wird nicht ein eigenes Package erstellt, sondern versucht den Quellcode des echten Packages zu verändern. Dies kann einerseits durch das Hacken von Entwickleraccounts erfolgen aber auch durch das Beitragen zum Open Source Quellcode wobei die bösartigen Eigenschaften verborgen werden.

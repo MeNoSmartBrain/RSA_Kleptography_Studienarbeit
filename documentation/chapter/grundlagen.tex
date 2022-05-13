@@ -71,8 +71,6 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
 
     \subsection{Prinzipien}
         In der Kryptologie gelten verschiedene Prinzipien. Diese sind zwar in der theoretischen Betrachtung nicht notwendig, haben aber in der realen Welt eine große Bedeutung.
-
-            % Rotierende Schlüssel, PERFECT FORWARD SECURITY
         \subsubsection{Prefect Forward Security}
             \ac{PFS} ist ein Prinzip für kryptographische Verfahren, dass durch zukünftige Veröffentlichung des Geheimnisses, die Vertraulichkeit von in der Vergangenheit versandten Nachrichten nicht gefährdet ist. Dies wird garantiert dadurch, dass langlebige Geheimnisse (bzgl. der Speicherung und Nutzung) zusammen mit temporären Geheimnissen zur Verschlüsselung genutzt werden. Somit kann ein Angreifer, der alte Geheimtexte gesammelt hat und im Besitz des langlebigen Geheimnisses ist, die gespeicherten Geheimtexte nicht entschlüssel. Dies kann auch z.B. durch rotierende Geheimnisse, wie Sitzungsschlüssel erreicht werden.  
 
@@ -188,8 +186,8 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
         \begin{equation}
         \begin{aligned}
             52 = 32 + 16 + 4 = 2^{5} + 2^{4} + 2^{2} \\
-            37^{52} \pmod {128} \equiv 37^{2^{5}} * 37^{2^{4}} * 37^{2^{2}} \\
-            \equiv 37^{2^{5}} \pmod {128} * 37^{2^{4}} \pmod {128} * 37^{2^{2}} \pmod {128}
+            37^{52} \pmod {128} \equiv 37^{(2^{5})} * 37^{(2^{4})} * 37^{(2^{2})} \\
+            \equiv 37^{(2^{5})} \pmod {128} * 37^{(2^{4})} \pmod {128} * 37^{(2^{2})} \pmod {128}
         \end{aligned}
         \eqlabel{eq-dis-exp-bspTwo}{Diskretere Exponentialfunktion mit großen Zahlen Beispiel-Zwei}
         \end{equation}
@@ -197,10 +195,10 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
         Die einzelnen Bestandteile werden dann iterativ berechnet und durch Multiplikation zusammengefasst (siehe \ref{eq-dis-exp-bspTwo}). Dies wird als Square-and-Multiply-Verfahren bezeichnet.
         \begin{equation}
         \begin{aligned}
-            37^{2^{2}} \pmod {128} \equiv (37^{2^{1}} \pmod {128})^{2} \\
-            37^{2^{3}} \pmod {128} \equiv (37^{2^{2}} \pmod {128})^{2} \\
-            37^{2^{4}} \pmod {128} \equiv (37^{2^{3}} \pmod {128})^{2} \\
-            37^{2^{5}} \pmod {128} \equiv (37^{2^{4}} \pmod {128})^{2}
+            37^{2^{2}} \pmod {128} \equiv (37^{(2^{1})} \pmod {128})^{2} \\
+            37^{2^{3}} \pmod {128} \equiv (37^{(2^{2})} \pmod {128})^{2} \\
+            37^{2^{4}} \pmod {128} \equiv (37^{(2^{3})} \pmod {128})^{2} \\
+            37^{2^{5}} \pmod {128} \equiv (37^{(2^{4})} \pmod {128})^{2}
         \end{aligned}
         \eqlabel{eq-dis-exp-bspThree}{Diskretere Exponentialfunktion mit großen Zahlen Beispiel-Drei}
         \end{equation}

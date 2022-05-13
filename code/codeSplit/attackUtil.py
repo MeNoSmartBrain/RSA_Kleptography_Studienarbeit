@@ -28,28 +28,19 @@ class AttackUtil:
         self.vP1 = rsaUtil.split_in_binary(self.public_N, self.rsa_bit_len)[0]
         self.vP2 = self.vP1 + 1
 
-        print("Extracted:", self.vP1)
-        print("Extracted:", self.vP2)
-        # print("Extracted:", rsaUtil.to_binary(self.public_N))
-        # print("Extracted:", rsaUtil.to_binary(self.vP1))
-        # print("Extracted:", rsaUtil.to_binary(self.vP2))
-
     def get_prime_factors(self):
         P1 = rsaUtil.decrypt(self.vP1, self.attackerKey.D, self.attackerKey.N)
         P2 = rsaUtil.decrypt(self.vP2, self.attackerKey.D, self.attackerKey.N)
 
-        Q1 = self.public_N / P1
-        Q2 = self.public_N / P2
+        Q1 = self.public_N // P1
+        Q2 = self.public_N // P2
 
-        print("Extracted:", P1)
-        print("Extracted:", P2)
-
-        if Q1.is_integer():
-            self.P = P1
-            self.Q = int(Q1)
-        elif not Q1.is_integer() and Q2.is_integer():
-            self.P = P2
-            self.Q = int(Q2)
+        if P1 * Q1 == self.public_N:
+            self.P = max(P1, Q1)
+            self.Q = min(P1, Q1)
+        elif P2 * Q2 == self.public_N:
+            self.P = max(P2, Q2)
+            self.Q = min(P2, Q2)
         else:
             print("Prime factors couldn't be recovered. Either non compromised publicKey or programming error!")
             raise
@@ -66,7 +57,6 @@ class AttackUtil:
                 created = True
             except ValueError:
                 print("Trying to generate Key failed. Trying again ...")
-        print("User Key successfully generated!")
 
     def return_params_as_key(self):
         ret_key = key.Key(self.rsa_bit_len)
