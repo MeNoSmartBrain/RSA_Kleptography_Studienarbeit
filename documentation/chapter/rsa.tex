@@ -1,20 +1,20 @@
 \chapter{RSA}
 \ac{RSA} ist ein kryptographisches Verfahren, welches zu den Public-Key-Verfahren gehört. Der Verfahren wurde von R. Rivest, A. Shamir und L. Adleman entwickelt und trägt deshalb ein Anagram der Erfinder als Namen.
 
-\section{Ablauf}
+\section{Ablauf} \label{rsa-ablauf}
     \paragraph{Ausgangszenario} Teilnehmer A will über ein öffentliches Netz sicher mit anderen Teilnehmer kommunizieren. 
 
     \paragraph{Schlüsselgeneration} Damit andere Teilnehmer geheime Nachrichten schicken können muss A sich ein Schlüsselpaar generieren. Dafür wählt er zwei zufällige und große Primzahlen: $P$ und $Q$. 
 
     Das Produkt von $P$ und $Q$ bildet $N$, welche den Modulo / den Zahlenraum für weitere mathematische Operationen festlegt: 
         \begin{equation}
-            N = P * Q
+            N = P \cdot Q
             \eqlabel{eq-rsa-npq}{RSA - Primfaktoren}
         \end{equation}
 
     Daraufhin berechnet der Teilnehmer die Eulersche $\phi$-Funktion von $P$ und $Q$:
         \begin{equation}
-            \phi(N) = (P-1) * (Q-1)
+            \phi(N) = (P-1) \cdot (Q-1)
             \eqlabel{eq-rsa-phi_n}{RSA - Eulersche $\phi$-Funktion}
         \end{equation})
     
@@ -26,7 +26,7 @@
     
     Der größte gemeinsame Teiler von $E$ und $\phi(n)$ ergibt $1$, wobei sich der private Schlüssel $D$ aus der Vielfachsummendarstellung ergibt. Die Vielfachsummendarstellung wird dem euklidischen Algorithmus entnommen.  Dabei gilt:
         \begin{equation}
-            c * \phi(N) + E * D \equiv 1
+            c \cdot \phi(N) + E \cdot D \equiv 1
             \eqlabel{eq-rsa-calc_d}{RSA - Berechnung des privaten Schlüssels}
         \end{equation}
     
@@ -86,8 +86,11 @@
         \end{equation}
     \end{itemize}
 
-    Für die Sicherheit der Public-Key-Verschlüsselung von RSA, spielt Unberechenbarkeit der Faktorisierung die Hauptrolle. Falls mit RSA signiert werden soll, ist zusätzlich die Unberechenbarkeit des diskreten Logarithmus wichtig. Ansonsten könnte der private Schlüssel bestimmt werden.
+    Für die Sicherheit der Public-Key-Verschlüsselung von RSA, spielt nicht effiziente Berechenbarkeit der Faktorisierung die Hauptrolle. Falls mit RSA signiert werden soll, ist zusätzlich die Unberechenbarkeit des diskreten Logarithmus wichtig. Ansonsten könnte der private Schlüssel bestimmt werden.
 
-    \subsection{Angriffe auf RSA}
+    \paragraph{Angriffe auf RSA}
     % Momentane Angriffe auf RSA
     % RSA ist momentan als sicher bekannt
+
+    % Fermatsche Faktorisierung
+    % Gemeinsame Primzahlen

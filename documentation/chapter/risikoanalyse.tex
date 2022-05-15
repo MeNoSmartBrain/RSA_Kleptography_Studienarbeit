@@ -1,14 +1,37 @@
 \chapter{Risikoanalyse}
     In dieser Risikoanalyse (engl. Threat Assessment) wird die Gefahr analysiert und evaluiert, welche kleptographische Angriffe auf kryptographische Softwarebibliotheken bilden.
 
+    Kleptographische Angriffe sind in der Lage, bei erfolgreichem Einsatz, kryptographische Systeme zo kompromittieren. Dadurch ist es für den Angreifer des kleptographischen Angriff möglich, die vom Nutzer verwendeten Krytposysteme zu brechen. Dadurch kann es zu Verletzung der Sicherheitsziele, Vertraulichkeit, Integrität und Authentizität, kommen. Ein Angreifer, kann somit in Namen des Opfers kommunizieren bzw. signieren, die Verschlüsslung zwischen Opfer und dritten Mitlesen und den Datenstrom manipulieren. Dies kann z.B. durch einen Man-In-The-Middle Angriff erfolgen wobei sich der Angreifer unentdeckt gegenüber zwei Kommunikationspartners als der jeweils andere ausgibt und als Zwischenstelle fungiert.
+
+    Durch die \ac{SETUP} wird vermieden, dass versteckte Kanäle genutzt werden müssen. Dies ist einerseits hilfreich um Untersuchungen zu umgehen, welche z.B. Netzwerkverkehr auf diese analysieren. Andererseits weitet diese Eigenschaft den Einsatzbereich von kleptographischen Angriffen aus. Durch die Manipulation der Daten, welche selbstständig durch den Nutzer veröffentlicht werden, können auch Krytposysteme, welche keinen direkten Zugang zu versteckten Kanälen (hier: Netzwerk) haben, durch kleptographische Angriff kompromittiert werden. Dies ist besonders Sichtbar am Beispiel von \ac{TPM}s, da keine Netzwerkschnittstelle haben. Somit können durch kleptographische Angriffe sowohl stark überwachte als auch sehr isolierte Krytposysteme kompromittiert werden. 
+
+    \section{Angriffsziele}
+        \subsection{TPM}
+            \ac{TPM} stellten die gefährlichsten Kryptosysteme dar, falls diese mit z.B. einer \ac{SETUP} versehen würde. \ac{TPM}s werden nur von wenigen Herstellern produziert und ihr Programmcode ist nach der Fertigung nicht manipulierbar. Zudem stellten \ac{TPM}s eine Back-Box dar, wodurch Quellcode-Analyse bzw. Reverse-Code-Engineering erschwert werden. Somit kann ein Angriff schlechter belegt bzw. erkannt werden. Eine kleptographische Backdoor, welche in einem \ac{TPM} entdeckt wird, impliziert mit hoher Wahrscheinlichkeit eine Kompromittierung aller \ac{TPM}s dieses Herstellers. Anderenfalls würde das Risiko bestehen, dass die Unterscheide zwischen \ac{TPM} über Seitenkanäle analysierbar sind.
+            Der potenzielle Schaden durch eine Kompromittierung von \ac{TPM}s ist dabei am größten.
+
+            Die Wahrscheinlichkeit, dass ein solcher Angriff erfolgreich wäre, ist sehr gering. Durch die Unveränderlichkeit des Programmcodes können solche Schwachstellen nicht nach der Herstellung erzeugt werden. Der Angriff müsste also vom Hersteller oder einem Teil dessen Lieferkette durchgeführt werden.
+
+        \subsection{Krytpo-Bibliotheken}
+            Krypto-Bibliotheken sind ein bisher wenig erforschtes Einsatzgebiet für kleptographische Angriffe. Dabei ist das Risiko zwischen proprietärer und Open-Source-Software zu unterscheiden.
+
+            \paragraph{Proprietäre Software}
+                Hersteller proprietärer Software können ähnlich zu Herstellern von \ac{TPM}s kleptographische Backdoor in ihre Produkte einbauen. Hierbei liegt auch eine Black-Box vor. Der Unterschied liegt in der Veränderbarkeit des Codes. Ein Hersteller oder ein Sourcecode-Virus kann nachträglich den Quellcode einer kleptographischen Backdoor versehen.
+                Nutzer der Software können durch das geschlossene Design nur schwer überprüfen, ob sie angegriffen werden. Proprietäre Software bieten Herstellern dir Möglichkeit ihren Nutzern End-zu-End-Verschlüsselung zu versprechen und trotzdem Einsicht in die Kommunikation erlangen.
+
+            \paragraph{Open-Source-Software}
+                Open-Source-Software bietet Nutzern Sicherheit, indem sie in der Lage sind, selbst die verwendete Software auf Backdoors zu überprüfen. Jedoch ergibt sich durch die mehrstufigen Abhängigkeitsbeziehungen heutiger Open-Source-Software, die Möglichkeit eines Dependency Confusion Angriffs \ref{Dependency Confusion}.
+
     \section{Angriffsvektoren}
-    % Wie kann ein Angriff verschleiert werden
-    % Wie kann man die Schwachstelle schaffen
-    % Wie sind Open Source Bibliotheken geschützt
+        Angriffsvektoren beschreiben die Wege über welche eine Angriff auf einem Zielsystem ausgeführt werden kann. 
 
-    \section{Gegenmaßnahmen}
-    % Was sind mögliche
+        \subsection{Dependency Confusion} \label{Dependency Confusion}
+            Grundfunktionen moderner Software jeglicher Hersteller basiert auf durch Open-Source-Software zur Verfügung gestellten Bibliotheken. Somit müssen sich Softwareentwickler nicht bei jedem Projekt neu damit befassen, Warteschlangen, Multithreading, Netzwerkprotokolle, kryptographische Funktionen, ... für ein neues Produkt zu entwickeln. Dieses Bereitstellen von Funktionalität wird durch Dependency (Abhängigkeiten) verwaltet. Dabei können Dependencies auch weitere Dependencies inherent haben. Somit spannt jede Dependency eines Softwareprodukts einen nicht zyklischen Graphen an Dependencies auf. Dabei werden Dependencies regelmäßig mit Sicherheitsupdates und neuen Features unter einer neuen Version aktualisiert. 
+            Um auf dem neuesten Stand zu sein, wird von einer Dependency die neuste Version geladen.
+            Dependency Confusion manifestiert sich auf zwei Arten. Der Entwickler des Produkts oder einer im Dependency Graphen des Produkts vorkommenden Dependencies verweist mit einer Dependency auf eine kompromittierte, andere Bibliothek. 
+            Oder indem eine bestehenden Dependency im Graphen kompromittiert wird.
 
-    \section{Risiko}
-    % Wie wahrscheinlich ist ein solcher Angriff
-    % Historische Angriffe?
+        \subsection{Sourcecode-Viren} \label{Sourcecode-Viren}
+            Sourcecode-Viren verändern während ihrer Laufzeit den Quellcode einer Anwendung oder Dependency. Somit können lokale (zwischen-)gespeicherte Dependencies verändert bzw. kompromittiert werden. Der Angreifer braucht hierfür jedoch die Möglichkeit Code (den Virus) auf dem Zielsystem auszuführen. 
+
+

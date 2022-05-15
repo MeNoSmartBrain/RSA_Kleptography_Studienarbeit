@@ -1,1 +1,12 @@
 \chapter{Fazit}
+    Die Sicherheit moderner kryptographischer Verfahren basiert auf der Geheimhaltung der Schlüssel und auf der Unberechenbarkeit schwerer mathematischer Probleme in vertretbarer Zeit.  
+    Kleptographische Angriffe stellen ein Risiko für moderne Software dar. Durch einen \ac{SETUP} ist es Angreifern möglich geheime Daten zu erlangen, wobei nur die vom Nutzer selbst veröffentlichten Daten genutzt werden. 
+    Kleptographie von kryptographischen Systemen ist dabei besonders gefährlich, da somit die Schutzziele der IT-Sicherheit, Vertraulichkeit, Integrität und Authentizität, verletzt werden können. Durch einen erfolgreichen Angriff auf ein RSA-Kryptosystem, kann der Angreifer sich als Opfer authentifizieren und Kommunikation entschlüsseln und manipulieren. 
+    Der in dieser Arbeit behandelte, kleptographische Angriff erzeugt eine \ac{SETUP}. Dadurch wird der öffentliche Modulus eines erzeugten Schlüssels manipuliert, sodass die most significant Bits des Modulus dem verschlüsselten Primfaktor $P$ entsprechen. Somit veröffentlicht der Nutzer den manipulierten Schlüssel und somit den Primfaktor selbst, wenn er den öffentlichen Schlüssel publiziert. 
+    Die Verschlüsselung ist einen asymmetrische RSA-Chiffre mit einem öffentlichen Schlüssel des Angreifers. Dadurch ist es nur dem Angreifer persönlich möglich den Primfaktor zu entschlüssel. Reverse-Engineering kann dabei nur den Angriff feststellen, aber nicht selbst benutzen.
+
+    Der Angriff wurde erfolgreich in die Open-Source-Bibliothek "python-rsa" implementiert. Wenn ein Programm, welches in seinem Dependency Graphen auf diese kompromittierte Dependency verweist, einen Schlüssel erzeugt, kann ein Angreifer, wenn in Besitz des entsprechenden privaten Schlüssels die geheimen Schlüsselparameter bestimmen. Abgesehen von dieser Schwachstelle werden vollständig sichere und funktionierende \ac{RSA}-Schlüssel erzeugt.
+
+    Die Algorithmen zur Erzeugung eines manipulierten Schlüssels und zur Extraktion der geheimen Parameter wurden im Laufe der Arbeit optimiert und genauer dokumentiert.
+
+    Für einen erfolgreichen Angriff der hier aufgezeigten Art, benötigt eine Angreifer die Möglichkeit Code auf die Zielsystem auszuführen und damit Programmcode zu ändern oder die Manipulation der kryptographischen Softwarebibliothek oder von Dependencies, welche zur Schlüsselerzeugung auf dem Zielsystem genutzt wird.  

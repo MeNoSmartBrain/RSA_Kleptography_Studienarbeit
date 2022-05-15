@@ -1,14 +1,11 @@
 \chapter{Kleptographie}
     \section{Definition}
-    % Was ist Kleptographie
+        Klepotgraphie ist ein von Adam Young and Moti Yung geprägter Begriff für das wissenschaftliche Feld der Extraktion von geschützten Informationen. Im Bezug auf kryptographische Systeme sind kleptographische Angriffe die geheime Extraktion vor geheimen Schlüsseln.
 
-
-    \section{Geschichte}
-    % Ursprünglicher Angriff / Konzept
 
     \section{Angriffskategorie}
-        Bisher wurden Angriffe auf kryptographisches Systeme in eine der vier Kategorien \ref{sec-Kryptoanalyse} unterteilt (Known Cipher, Known Plaintext, Chosen Cipher, Chosen Plaintext). Ein kleptographischer Angriff fällt jedoch in keiner dieser Kategorien. Für kleptographische Angriffe müsste eine weitere, fünfte Kategorie geschaffen werden: Known Key Attacks. 
-        % Angriff auf die Implementation
+        Bisher wurden Angriffe auf kryptographisches Systeme in eine der vier Kategorien \ref{sec-Kryptoanalyse} unterteilt (Known Cipher, Known Plaintext, Chosen Cipher, Chosen Plaintext). Ein kleptographischer Angriff fällt jedoch in keiner dieser Kategorien. Für kleptographische Angriffe müsste eine weitere, fünfte Kategorie geschaffen werden: Controlled Key Attacks. 
+        Dabei ist nach einem erfolgreichem Angriff der Schlüssel bekannt. Da nach Kerckhoff's Prinzip die Sicherheit eines Systems ausschließlich auf der Geheimhaltung der Schlüssel basiert, ist somit ein kryptographisches System gebrochen. Die Bezeichnung Controlled Key Attack, wurde gewählt, da der Angreifer die Schlüsselerstellung kontrollieren kann, jedoch nicht den schlüssel an sich direkt übertragen kann.
 
     \section{Aufbau kleptographischer Angriffe}
     
@@ -84,7 +81,7 @@
 
             \paragraph{Schritt 3} \label{sec-Schritt-Ang 3} $P$ wird durch die Entschlüsslung von $vP$ mittels des privaten Schlüssels des Angreifers berechnet: 
             \begin{equation}
-                P = (vP)^{D_{A}} \mod N_{A}
+                P = vP^{D_{A}} \mod N_{A}
                 \eqlabel{eq-SETUP-P}{Berechnung des ersten Primfaktors bei kleinem R}
             \end{equation}
             Damit ist dieser Schritt die inverse Operation zu \ref{sec-Schritt-Gen 1}.
@@ -117,28 +114,28 @@
 
             \paragraph{Schlüssel des Angreifer} muss die halbe Länge des Schlüsselgenerators haben.
                 \begin{equation}
-                    N_{A} \mid \overline{N_{A}} = n_{A} = (n/2)
+                    N_{A} \mid \overline{N_{A}} = n_{A} = \frac{n}{2}
                 \end{equation}
 
             \paragraph{P} ist einer der beiden Primfaktoren des \ac{RSA}-Schlüsselgenerators. 
                 \begin{equation}
-                    P \in \mathbb{P}, \overline{P} = n/2
+                    P \in \mathbb{P}, \overline{P} = \frac{n}{2}
                 \end{equation}
             
-            \paragraph{vP} ist die Verschlüsselung von $P$ mittels dem öffentlichen Schlüssel des Angreifers. Da der Schlüssel des Angreifers $\overline{N_{A}} = n_{A} = (n/2)$ hat, gilt $\overline{vP} = \overline{P}$. Dabei kann $vP$ als Zufallszahl betrachtet werden (siehe \ref{sec-RSA-assertion}). 
+            \paragraph{vP} ist die Verschlüsselung von $P$ mittels dem öffentlichen Schlüssel des Angreifers. Da der Schlüssel des Angreifers $\overline{N_{A}} = n_{A} = \frac{n}{2}$ hat, gilt $\overline{vP} = \overline{P}$. Dabei kann $vP$ als Zufallszahl betrachtet werden (siehe \ref{sec-RSA-assertion}). 
                 \begin{equation}
                     P^{E_{A}} \mod N_{A}
                 \end{equation}                
             
-            \paragraph{N'} $N'$ ist die Konkatenation von $vP$ einer Zufallszahl $t$.
+            \paragraph{N'} $N'$ ist die Konkatenation von $vP$ einer Malware $\frac{n}{2}$ Zufallszahl $t$.
             \begin{equation}
                 N' = vP || t
             \end{equation}
 
-            \paragraph{Q} ist der zweite Primfaktor. Jedoch wird er nicht wie üblich generiert sondern aus den Parametern $P$ und $N'$ berechnet.
+            \paragraph{Q} ist der zweite Primfaktor. Jedoch wird er nicht wie üblich generiert, sondern aus den Parametern $P$ und $N'$ berechnet.
             
             \begin{equation}
-                Q : N' = P \cdot Q + R \mid Q \in \mathbb{P} \wedge \overline{R} = (n/2)
+                Q : N' = P \cdot Q + R \mid Q \in \mathbb{P}, \overline{R} = \frac{n}{2}
             \end{equation}
 
             \paragraph{N} $N$ ist das Produkt der Primzahl $P$ und $Q$. Dadurch sind die einzigen Teiler von $N$, $P$ oder $Q$. Dabei gilt $\overline{N} = n$.
@@ -147,7 +144,7 @@
 
             \paragraph{D} ist der private Schlüssel. $mmi()$ ist dabei die modulare multiplikative Inverse.
             \begin{equation}
-                D = mmi(E, \lambda(N)) \mid \lambda(N) = (P-1)\cdot(Q-1)
+                D = mmi(E, \Phi(N)) \mid \Phi(N) = (P-1)\cdot(Q-1)
             \end{equation}
 
             \paragraph{M, C, S}, also jegliche Eingabe in eine \ac{RSA}-Operation muss kleiner $N$ sein.
@@ -157,9 +154,9 @@
             Längendefinitionen:
             \begin{itemize}
                 \item $N, N'$ hat $n$ Bit
-                \item $vp, R$ hat $n/2$ Bit
+                \item $vp, R$ hat $\frac{n}{2}$ Bit
             \end{itemize}
-            $vP$ kann aus $N$ bestimmt werden, durch die Beziehung von $N$ und $N'$. Dabei gilt $N + R = N'$, wobei $R$ dem Angreifer nicht bekannt ist. Jedoch ist definiert, dass $R$ nur halb so viele Bits wie $N$ hat. Dadurch findet die Addition von $N + R$ nur auf den niederwertigeren Bits von $N$ statt. Somit sind die höherwertigen Bits von $N$ (Bits > $(n/2)$) nicht von der Addition mit $R$ beeinflusst und somit gleich zu den höherwertigen Bits von $N'$. Dies ist nur dann nicht der Fall, wenn es bei der Addition zu einem Überlauf für. In diesem Fall sind alle Bit > $(n/2)$ von $N$, die höherwertigen Bits von $N' + 1$.
+            $vP$ kann aus $N$ bestimmt werden, durch die Beziehung von $N$ und $N'$. Dabei gilt $N + R = N'$, wobei $R$ dem Angreifer nicht bekannt ist. Jedoch ist definiert, dass $R$ nur halb so viele Bits wie $N$ hat. Dadurch findet die Addition von $N + R$ nur auf den niederwertigeren Bits von $N$ statt. Somit sind die höherwertigen Bits von $N$ (Bits > $\frac{n}{2}$ nicht von der Addition mit $R$ beeinflusst und somit gleich zu den höherwertigen Bits von $N'$. Dies ist nur dann nicht der Fall, wenn es bei der Addition zu einem Überlauf für. In diesem Fall sind alle Bit > $\frac{n}{2}$ von $N$, die höherwertigen Bits von $N' + 1$.
             Zudem ist definiert, dass die höherwertigen von $N'$ gleich $vP$ sind (siehe \ref{eq-SETUP-N'}).
             Da der Angreifer nur $N$ aber nicht auch $R$ kennt, muss die Möglichkeit eines Überlauf durch $R$ berücksichtigt werden. 
             Aufgrund dessen kann der Angreifer $vP$ aus den höherwertigen Bits von $N$ lesen. Muss aber auch $vP + 1$ als Option berücksichtigen, da er nicht weiß, ob ein Überlauf stattgefunden hat.               

@@ -212,6 +212,7 @@ auf der \emph{FAQ-Seite} des Studiengangs Informatik zu finden:
 % Jetzt kommt der "eigentliche" Text
 \include{abk}              % Abkürzungsverzeichnis
 
+\input{./chapter/einleitung.tex}
 \input{./chapter/grundlagen}
 \input{./chapter/rsa}
 \input{chapter/kleptography.tex}
@@ -219,10 +220,13 @@ auf der \emph{FAQ-Seite} des Studiengangs Informatik zu finden:
 \input{chapter/implementation.tex}
 \input{chapter/risikoanalyse.tex}
 \input{chapter/fazit.tex}
+\input{chapter/ausblick.tex}
 
 % Ab hier beginnt der Anhang
 \appendix
-\addcontentsline{toc}{chapter}{Anhang}
+
+% \addcontentsline{toc}{chapter}{Anhang}
+\input{anhang.tex}
 
 \addcontentsline{toc}{chapter}{Index}
 \printindex

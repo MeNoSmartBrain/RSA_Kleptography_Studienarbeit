@@ -1,0 +1,10 @@
+\chapter{Einleitung}
+
+    \section{Problemfrage}
+        Kryptographische Algorithmen bilden die Grundbausteine einer modernen, sicheren Kommunikation über öffentliche Netzwerke. Dabei garantieren sie Integrität, Vertraulichkeit und Authentizität. Folgend dem Kerckhoff Prinzip, nach welchem die Sicherheit eines kryptographischen Systems auf der Geheimhaltung der generierten Schlüssel beruht, kann die Sicherheit durch Kompromittierung der Schlüsselerstellung gebrochen werden.
+        Kann eine RSA-Implementation bösartig verändert werden, dass ein Angreifer, die geheimen Parameter aller Schlüssel erfährt, jedoch ohne, dass dafür versteckte Kanäle genutzt werden und selbst wenn die Veränderungen bekannt werden, nur dem Angreifer in der Lage ist, die Schwachstelle auszunützen?
+        Wie kann dies in moderner Open-Source Software realisiert werden und stellt dies eine Gefahr dar?
+
+    \section{Ziel}
+        Ziel der Arbeit ist die Entwicklung und Implementation einer kleptographischen Schwachstelle für RSA. Dabei soll die Korrektheit des Angriffes, die mathematischen Zusammenhänge und der Ablauf des Angriffs erläutert werden. Zusätzlich soll das Verfahren entsprechend optimiert werden, um das Risiko zeit-basierten Analysen zu vermeiden. 
+        Es soll gezeigt werden, dass durch die Integration des Angriffs in eine öffentliche Krypto-Bibliothek gezeigt werden, dass die Schlüssel alle Nutzer dieser Bibliothek von einem Angreifer gebrochen werden können. Das Risiko eines solchen Angriffs soll aufgezeigt und evaluiert werden. 

@@ -1,0 +1,13 @@
+\chapter{Ausblick}
+    In der Arbeit wurde erfolgreich ein kleptographischer Angriff in eine verbreitete Software-Bibliothek für kryptographische Operationen in python durchgeführt. 
+
+    Für die Vermeidung von Angriffen ist die Sicherheit von Dependency Chains / Graphen wichtig. Die Sicherheitsmaßnahme der einzelnen Dependency Manager, wie pip, npm und maven zu betrachten, sollte Teil zukünftiger Forschung in dem Themengebiet sein.
+
+    Zudem müssen effektive Maßnahmen entwickelt werden um absichtliche kleptographische Backdoors durch Hersteller von proprietärer Software oder \ac{TPM}s zu vermeiden. Dabei wird ein offenerer Designansatz eine große Rolle spielen.
+
+    Die Analyse über Seitenkanäle, wie u.a. das Messen von Zeit wurde bei dieser Arbeit außer acht gelassen, da fast alle software-basierten Krypto-Systeme auf diese Art angreifbar sind.
+    
+    Die aufgezeigt Methodik zur Berechnung der manipulierten Schlüssel und der Extraktion derer geheimen Parameter wurde optimiert, könnte aber noch durch effizientere Algorithmen zur Suche einer Primzahl innerhalb eines Intervals oder dem chinesischen Restsatz zur effizienteren Modulo-Rechnung weiter optimiert werden.
+
+    Der Author dieser Arbeit geht nicht davon aus, dass das Thema der Kleptographie in in nächsten Jahren viel Beachtung finden wird außerhalb von Forschern in Kryptographie. 
+    Kleptographie, insbesondere \ac{SETUP} stellen eine erhebliche Gefahr da. Gegenmaßnahmen werden diesbezüglich solange als zu unpraktikable gesehen, bis es zu einem größeren Sicherheitsvorfall kommt.

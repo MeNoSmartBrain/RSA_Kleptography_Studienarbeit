@@ -230,18 +230,19 @@ In diesem Kapitel werden die theoretischen Grundlagen der Kryptologie, Mathemati
     
 
 \section{Komplexitätstheorie}
-    Die Komplexitätstheorie befasst sich mit der Komplexität von Problemen, welche durch Algorithmen gelöst werden. Dabei wird der Speicherbedarf und der Zeitaufwand eines Algorithmus. Schrankenfunktionen werden gebildet durch die Betrachtung des Speicherbedarf und des Zeitaufwands im Bezug auf die Länge der Eingabeparameter. Da hier eine reine kryptographische Betrachtung der Schrankenfunktionen stattfinden soll, wird hier nur in zwei verallgemeinerte Schrankenfunktionen \footcite[178]{BSW.2015} unterschieden:
+    Die Komplexitätstheorie befasst sich mit der Komplexität von Problemen, welche durch Algorithmen gelöst werden. Dabei wird der Speicherbedarf und der Zeitaufwand eines Algorithmus betrachtet. Schrankenfunktionen werden gebildet durch die Betrachtung des Speicherbedarf und des Zeitaufwands im Bezug auf die Länge der Eingabeparameter. Da hier eine reine kryptographische Betrachtung der Schrankenfunktionen stattfinden soll, wird hier nur in zwei verallgemeinerte Schrankenfunktionen \footcite[178]{BSW.2015} unterschieden:
     \begin{itemize}
         \item Polynomiale Komplexität
-        \item Nichtpolynomiale Komplexität
+        \item Nicht-deterministisch-polynomiale Komplexität
     \end{itemize}
-    Polynomiale Komplexität umfasst hier alle Probleme, die algorithmisch mit polynomialem Aufwand (Zeit/Speicher) gelöst werden können. D.h. bei steigender Eingabelänge $n$ steigt der Aufwand im schlimmsten Fall mit $\mathcal{O}(n^{c} \mid \text{c is constant})$.
+    Polynomiale Komplexität umfasst hier alle Probleme, die algorithmisch mit polynomialem Aufwand (Zeit/Speicher) gelöst werden können. D.h. bei steigender Eingabelänge $n$ steigt der Aufwand im schlimmsten Fall mit $\mathcal{O}(n^{c}$, wobei $c$ konstant ist.
     Diese Probleme gehören damit zur Komplexitätsklasse \textbf{P}. Diese umfasst alle Probleme, welche algorithmisch mit maximal polynomialem Aufwand gelöst werden können. Diese Probleme können meistens von modernen Computern gelöst werden.
 
-    Nichtpolynomiale Komplexität hingegen umfasst alle Probleme, die mehr als polynomialen Aufwand im Worst-Case brauchen. Dies können Probleme sein, die algorithmisch nur mit exponentiellen $\mathcal{O}(d^{n} \mid d > 1)$ oder faktoriellen $\mathcal{O}(n!)$ Aufwand \footcite{wiki.komplex} gelöst werden können. 
-    Diese Probleme werden der Komplexitätsklasse \textbf{NP} zugewiesen. Dies sind Probleme können nicht von deterministischen Computern in mit polynomialen Aufwand gelöst werden. 
+    Nicht-deterministisch-polynomiale Komplexität hingegen umfasst alle Probleme, die deterministisch mehr als polynomialen Aufwand im Worst-Case brauchen. Dies können Probleme sein, die algorithmisch nur mit exponentiellen $\Omega(d^{n} \mid d > 1)$ oder faktoriellen $\mathcal{O}(n!)$ Aufwand \footcite{wiki.komplex} gelöst werden können. 
+    Diese Probleme werden der Komplexitätsklasse $\mathcal{NP}$ zugewiesen. Dies sind Probleme können nicht von deterministischen Computern in Polynomialzeit gelöst werden. 
     
-    \paragraph{Bezug zur Kryptographie} Dadurch sind sie für die Kryptographie besonders interessant, da man die Sicherheit eines Systems auf ein NP-vollständiges Problem stützen kann. Somit ist die theoretische Sicherheit des Systems nicht brechbar. Jedoch sollte darauf geachtet werden, dass die vorgesehenen Teilnehmer an einem Datenaustausch nicht auch das NP-vollständige problem lösen müssen. Ihr Aufwand soll so gering wie möglich gehalten werden, wobei der Aufwand für einen Angreifer exponentiell oder faktoriell zur Sicherheit der Systems (z.B. die Länge des Schlüssels) ist. 
+    \paragraph{Bezug zur Kryptographie} Dadurch sind mathematische Probleme in $\mathcal{NP}$ für die Kryptographie besonders interessant, da man die Sicherheit eines Systems auf ein NP-vollständiges Problem stützen kann. Somit ist die theoretische Sicherheit des Systems nicht mit vertretbaren Aufwand  brechbar. Jedoch sollte darauf geachtet werden, dass die vorgesehenen Teilnehmer an einem Datenaustausch nicht auch das NP-vollständige Problem lösen müssen. Ihr Aufwand soll so gering wie möglich gehalten werden, wobei der Aufwand für einen Angreifer exponentiell oder faktoriell zur Sicherheit des Systems (z.B. die Länge des Schlüssels) ist. 
 
-    Beispiele für solche Probleme sind der diskrete Logarithmus \ref{sec-Diskreter Lograithmus} und die Faktorisierung \ref{sec-Faktorisierung} eines Produkt von Primzahlen\footcite[179]{BSW.2015}. Weitere Beispiele wäre die Berechnung des Isomorphismus zweier Graphen, das Berechnen von Modularen Quadratwurzeln oder die Multiplikation auf elliptischen Kurven.
+    Beispiele für solche Probleme sind der diskrete Logarithmus \ref{sec-Diskreter Lograithmus} und die Faktorisierung \ref{sec-Faktorisierung} eines Produkt von Primzahlen\footcite[179]{BSW.2015}. Weitere Beispiele wäre die Berechnung des Subgraph-Isomorphismus zweier Graphen, das Berechnen von Modularen Quadratwurzeln oder die Multiplikation auf elliptischen Kurven.
+    % QUELLEN
 
